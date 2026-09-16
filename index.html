@@ -17,14 +17,6 @@
 .choice-btn small{display:block;color:var(--muted);margin-top:5px;font-weight:600}
 .math-quiz{max-width:850px;margin:20px auto 0}
 .math-question{font-size:clamp(34px,6vw,62px);font-weight:950;text-align:center;margin:45px 0}
-.grade-card{position:relative;overflow:hidden;transform:translateY(0);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;background:linear-gradient(145deg,#fff,#f4f7ff)}
-.grade-card::before{content:"✨";position:absolute;right:10px;top:6px;font-size:22px;opacity:.7}
-.grade-card:hover{transform:translateY(-7px) rotate(-.5deg);box-shadow:0 18px 35px #243b7a22;border-color:#8b7cff}
-.grade-card strong{font-size:27px;display:block;margin-bottom:7px}.grade-card small{font-weight:800;line-height:1.35}
-.math-question{background:linear-gradient(135deg,#fff7cf,#eaf7ff);border:4px solid #fff;border-radius:30px;padding:28px 18px;box-shadow:0 14px 30px #243b7a18;animation:popIn .35s ease}
-.math-answer{cursor:pointer;transition:transform .12s ease,box-shadow .12s ease}.math-answer:hover{transform:scale(1.035) rotate(-.4deg);box-shadow:0 10px 20px #243b7a18}
-@keyframes popIn{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:scale(1) translateY(0)}}
-
 .math-answer-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .math-answer{background:#f3f6fb;color:var(--text);padding:20px;border-radius:17px;font-size:22px;font-weight:900;border:2px solid transparent}
 .math-answer:hover{background:#e9edff}
@@ -380,18 +372,26 @@ function renderScienceGrades(){const el=$('scienceContent');el.innerHTML=`<div c
 function chooseScienceGrade(g){scienceGrade=g;renderScienceTopics()}
 function renderScienceTopics(){const topics=scienceTopics[scienceGrade];$('scienceContent').innerHTML=`<div class="hero" style="padding:20px 0 0"><div style="font-size:56px">🧪</div><h1 style="font-size:40px">Science • Grade ${scienceGrade}</h1><p>Choose a strand to practise.</p></div><div class="topic-grid">${topics.map(t=>`<button class="choice-btn" onclick="startScience('${escapeAttr(t[0])}')">${t[0]}<small>${t[1]}</small></button>`).join('')}</div><div style="text-align:center;margin-top:20px"><button class="secondary" onclick="renderScienceGrades()">← Change grade</button></div>`}
 function startScience(topic){scienceTopic=topic;scienceIndex=0;scienceScore=0;scienceAnswered=false;scienceQuestions=buildScienceQuestions(scienceGrade,topic,8);renderScienceQuestion()}
-function buildScienceQuestions(g,topic,n){const bank={
-'Living Things':[['Which feature is found in all living things?',['They grow and reproduce','They are all green','They all fly','They all live on land'],'They grow and reproduce'],['Which is a plant?',['Oak tree','Wolf','Mushroom','Eagle'],'Oak tree']],
-'Plants & Animals':[['What do plants need for photosynthesis?',['Light','Plastic','Salt only','Sound'],'Light'],['A habitat is…',['A place where an organism lives','A type of weather','A body organ','A planet'],'A place where an organism lives']],
-'Biology':[['What is the basic unit of life?',['Cell','Organ','Bone','Atom'],'Cell'],['Which organ pumps blood?',['Heart','Lung','Kidney','Stomach'],'Heart']],
-'Cells':[['Which structure controls many cell activities?',['Nucleus','Cell wall only','Rib','Bone'],'Nucleus'],['What do plants use to make food?',['Photosynthesis','Digestion','Respiration only','Filtration'],'Photosynthesis']],
-'Chemistry':[['What state has a fixed volume but no fixed shape?',['Liquid','Solid','Gas','Plasma'],'Liquid'],['Which is an element?',['Oxygen','Water','Carbon dioxide','Salt solution'],'Oxygen']],
-'Materials':[['Which material is usually a good electrical conductor?',['Copper','Rubber','Wood','Glass'],'Copper'],['A solid changing to a liquid is called…',['Melting','Freezing','Condensing','Evaporating'],'Melting']],
-'Physics':[['What force pulls objects toward Earth?',['Gravity','Friction','Magnetism','Upthrust'],'Gravity'],['Which travels fastest in a vacuum?',['Light','Sound','Water waves','Ocean currents'],'Light']],
-'Forces':[['What is measured in newtons?',['Force','Mass','Temperature','Time'],'Force'],['If forces are balanced, an object’s motion…',['Does not change because of the net force','Must speed up','Must stop','Must move upward'],'Does not change because of the net force']],
-'Earth & Space':[['Earth takes about how long to orbit the Sun?',['One year','One day','One month','One hour'],'One year'],['Day and night are caused mainly by…',['Earth rotating','The Moon rotating around Earth','Clouds moving','The Sun orbiting Earth'],'Earth rotating']],
-'Scientific Skills':[['The variable you deliberately change is the…',['Independent variable','Dependent variable','Control variable','Conclusion'],'Independent variable'],['A good scientific conclusion should be based on…',['Evidence','A guess only','Popularity','A drawing only'],'Evidence']]};
-const keys=Object.keys(bank);let pool=bank[topic]||bank[keys[g%keys.length]]||bank['Biology'];const qs=[];for(let i=0;i<n;i++){const base=pool[i%pool.length];qs.push({q:base[0],options:[...base[1]].sort(()=>Math.random()-.5),correct:base[2]})}return qs}
+function buildScienceQuestions(g,topic,n){
+ const bank={
+ Biology:[
+  ['What is the basic unit of life?',['Cell','Atom','Organ','Tissue'],'Cell'],['Which organ pumps blood around the body?',['Heart','Lung','Kidney','Stomach'],'Heart'],['What process do green plants use to make glucose?',['Photosynthesis','Respiration','Digestion','Filtration'],'Photosynthesis'],['Which blood cells help defend the body against pathogens?',['White blood cells','Red blood cells','Platelets','Plasma cells'],'White blood cells']],
+ Chemistry:[
+  ['Which particle has a negative charge?',['Electron','Proton','Neutron','Nucleus'],'Electron'],['What is the pH of a neutral solution at room temperature?',['7','0','14','10'],'7'],['Which is an element?',['Oxygen','Water','Carbon dioxide','Sodium chloride'],'Oxygen'],['What is the change from liquid to gas called?',['Evaporation','Freezing','Melting','Condensation'],'Evaporation']],
+ Physics:[
+  ['What is measured in newtons?',['Force','Mass','Energy','Temperature'],'Force'],['What is the equation for speed?',['distance ÷ time','time ÷ distance','distance × time','mass ÷ volume'],'distance ÷ time'],['Which form of energy is stored in a stretched elastic band?',['Elastic potential','Kinetic','Thermal','Nuclear'],'Elastic potential'],['Which wave can travel through a vacuum?',['Light','Sound','Water','Seismic only'],'Light']],
+ 'Plants & Animals':[['What gas do plants take in for photosynthesis?',['Carbon dioxide','Oxygen','Nitrogen','Hydrogen'],'Carbon dioxide'],['What is a habitat?',['The place where an organism lives','A body organ','A type of rock','A weather event'],'The place where an organism lives']],
+ Materials:[['Which material is usually a good electrical conductor?',['Copper','Rubber','Glass','Wood'],'Copper'],['A solid changing into a liquid is called…',['Melting','Freezing','Condensation','Evaporation'],'Melting']],
+ 'Earth & Space':[['How long does Earth take to orbit the Sun?',['About 1 year','About 1 day','About 1 month','About 1 hour'],'About 1 year'],['Day and night are mainly caused by…',['Earth rotating on its axis','The Moon orbiting Earth','Clouds moving','The Sun orbiting Earth'],'Earth rotating on its axis']],
+ 'Scientific Skills':[['The variable deliberately changed by a scientist is the…',['Independent variable','Dependent variable','Control variable','Conclusion'],'Independent variable'],['A conclusion should be based on…',['Evidence from the results','A guess','The title','Personal preference'],'Evidence from the results'],['Why repeat measurements?',['To improve reliability','To make results look bigger','To change the hypothesis','To remove all variables'],'To improve reliability']]
+ };
+ let pool=bank[topic]||bank.Biology;
+ // Add harder Grade 8/9 calculation/application questions.
+ if(g>=8&&topic==='Physics')pool=pool.concat([['A car travels 150 m in 10 s. What is its average speed?',['15 m/s','1500 m/s','15 km/s','1.5 m/s'],'15 m/s'],['A 2 kg object accelerates at 3 m/s². What resultant force acts on it?',['6 N','1.5 N','5 N','9 N'],'6 N']]);
+ if(g>=8&&topic==='Chemistry')pool=pool.concat([['Which equation is balanced?',['2H₂ + O₂ → 2H₂O','H₂ + O₂ → H₂O','H₂ + 2O₂ → 2H₂O','2H₂ + 2O₂ → H₂O'],'2H₂ + O₂ → 2H₂O'],['A solution with pH 2 is…',['Strongly acidic','Neutral','Weakly alkaline','Strongly alkaline'],'Strongly acidic']]);
+ if(g>=8&&topic==='Biology')pool=pool.concat([['In a simple food chain, energy is transferred from…',['Producer to consumer','Consumer to producer','Decomposer to Sun','Predator to Sun'],'Producer to consumer'],['What is a gene?',['A section of DNA carrying information','A type of cell','A protein molecule only','An organelle'],'A section of DNA carrying information']]);
+ const qs=[];for(let i=0;i<n;i++){const b=pool[i%pool.length];qs.push({q:b[0],options:[...b[1]].sort(()=>Math.random()-.5),correct:b[2]})}return qs;
+}
 function renderScienceQuestion(){const q=scienceQuestions[scienceIndex];$('scienceContent').innerHTML=`<div class="game-header"><div><span class="badge">Grade ${scienceGrade} • ${escapeHtml(scienceTopic)}</span><h1 style="margin:10px 0 0">Science Challenge</h1></div><button class="danger" onclick="goHome()">✕</button></div><div class="math-quiz"><div class="progress-track"><div class="progress-bar" style="width:${scienceIndex/scienceQuestions.length*100}%"></div></div><div class="question-meta"><span>Question ${scienceIndex+1} of ${scienceQuestions.length}</span><span>Score ${scienceScore}</span></div><div class="question">${escapeHtml(q.q)}</div><div class="answers">${q.options.map((a,i)=>`<button class="answer" onclick="answerScience(${i})">${escapeHtml(a)}</button>`).join('')}</div></div>`}
 function answerScience(i){if(scienceAnswered)return;scienceAnswered=true;const q=scienceQuestions[scienceIndex],btns=[...document.querySelectorAll('.answer')];btns.forEach((b,j)=>{b.disabled=true;if(q.options[j]===q.correct)b.classList.add('correct');if(j===i&&q.options[j]!==q.correct)b.classList.add('wrong')});const ok=q.options[i]===q.correct; if(ok)scienceScore++; recordLearning('science',ok); dinoFeedback(ok); if(ok){toast('Correct! 🔬')}else{toast('Keep going! 💪')};setTimeout(()=>{scienceIndex++;scienceAnswered=false;if(scienceIndex>=scienceQuestions.length)finishScience();else renderScienceQuestion()},500)}
 function finishScience(){const pct=Math.round(scienceScore/scienceQuestions.length*100);$('scienceContent').innerHTML=`<div class="result"><div class="trophy">${pct===100?'🏆':'🎉'}</div><h2>${pct===100?'Perfect Science Score!':'Science Complete!'}</h2><div class="score-ring">${pct}%</div><p class="muted">Grade ${scienceGrade} • ${escapeHtml(scienceTopic)} • ${scienceScore}/${scienceQuestions.length} correct</p><button class="primary" onclick="startScience(scienceTopic)">Play again</button> <button class="secondary" onclick="renderScienceTopics()">Change topic</button></div>`}
@@ -418,8 +418,8 @@ const mathTopics={
   5:[['Fractions','Add and subtract simple fractions'],['Decimals','Add and subtract decimals'],['Geometry','Area, perimeter and basic angles'],['Expressions','Simple order of operations']],
   6:[['Ratios','Ratios and proportions'],['Integers','Positive and negative numbers'],['Expressions','Expressions and equations'],['Geometry','Area and volume']],
   7:[['Proportions','Rates and proportional relationships'],['Equations','One- and two-step equations'],['Percentages','Percent increase and decrease'],['Geometry','Circles and angles']],
-  8:[['Linear Equations','Solve linear equations'],['Functions','Tables, graphs and functions'],['Systems','Systems of equations'],['Exponents','Powers and scientific notation']],
-  9:[['Algebra','Polynomials and algebraic manipulation'],['Quadratics','Quadratic equations'],['Functions','Linear and quadratic functions'],['Geometry','Coordinate and geometric reasoning']]
+  8:[['Algebra','Expand brackets, simplify and collect like terms'],['Linear Equations','Solve multi-step equations'],['Functions','Function machines, squares and cubes'],['Geometry','Area, circumference and volume']],
+  9:[['Algebra','Expand single and double brackets and simplify'],['Quadratics','Factorise and solve quadratic equations'],['Functions','Function machines, powers and composite rules'],['Geometry','Circle, sphere, cylinder, prism and pyramid volume']]
 };
 let mathGrade=null,mathTopic=null,mathQuestions=[],mathIndex=0,mathScore=0,mathAnswered=false;
 
@@ -433,7 +433,7 @@ function renderMathGrades(){
 function chooseMathGrade(g){mathGrade=g;renderMathTopics()}
 function renderMathTopics(){
  const topics=mathTopics[mathGrade];
- $('mathContent').innerHTML=`<div class="hero" style="padding:20px 0 0"><div style="font-size:56px">🎓</div><h1 style="font-size:40px">Grade ${mathGrade} 🚀</h1><p>${mathGrade===9?'Level up! Algebra, quadratics, functions and coordinate geometry await. 🧠✨':'Now choose what you want to practice.'}</p></div>
+ $('mathContent').innerHTML=`<div class="hero" style="padding:20px 0 0"><div style="font-size:56px">🎓</div><h1 style="font-size:40px">Grade ${mathGrade}</h1><p>Now choose what you want to practice.</p></div>
  <div class="topic-grid">${topics.map((t,i)=>`<button class="choice-btn" onclick="startMath('${escapeAttr(t[0])}')">${t[0]}<small>${t[1]}</small></button>`).join('')}</div>
  <div style="text-align:center;margin-top:20px"><button class="secondary" onclick="renderMathGrades()">← Change grade</button></div>`;
 }
@@ -443,41 +443,51 @@ function startMath(topic){
 function randInt(a,b){return Math.floor(Math.random()*(b-a+1))+a}
 function buildMathQuestions(g,topic,n){
  const qs=[];
+ const uniqueOptions=(correct,makeWrong)=>{const vals=new Set([String(correct)]);let tries=0;while(vals.size<4&&tries++<100){const v=makeWrong();if(v!==undefined&&v!==null&&String(v)!==String(correct))vals.add(String(v))}return [...vals].sort(()=>Math.random()-.5)};
  for(let i=0;i<n;i++){
-   let a,b,ans,q;
-   if(topic==='Addition'){
-     const max=g===1?10:g===2?50:g<=5?200:1000; a=randInt(0,max);b=randInt(0,max-a);ans=a+b;q=`${a} + ${b} = ?`;
-   }
-   else if(topic==='Subtraction'){
-     const max=g===1?10:g===2?50:g<=5?200:1000; a=randInt(0,max);b=randInt(0,a);ans=a-b;q=`${a} − ${b} = ?`;
-   }
-   else if(topic==='Addition & Subtraction'){
-     const max=g===2?99:200; a=randInt(10,max);b=randInt(1,Math.min(50,a)); const subtract=Math.random()<.5; ans=subtract?a-b:a+b; q=subtract?`${a} − ${b} = ?`:`${a} + ${b} = ?`;
-   }
-   else if(topic==='Multiplication'){
-     const maxA=g===2?5:g===3?10:g<=5?20:50; const maxB=g===2?10:g===3?10:g<=5?12:30; a=randInt(1,maxA);b=randInt(1,maxB);ans=a*b;q=`${a} × ${b} = ?`;
-   }
-   else if(topic==='Division'){
-     const b=randInt(2,g<=3?10:12); ans=randInt(1,g<=3?10:25); a=b*ans; q=`${a} ÷ ${b} = ?`;
-   }
-   else if(topic==='Place Value'){
-     const max=g===2?99:999; a=randInt(10,max); const positions=g===2?[1,10]:[1,10,100]; let pos=positions[randInt(0,positions.length-1)]; ans=Math.floor(a/pos)%10; q=`What digit is in the ${pos===100?'hundreds':pos===10?'tens':'ones'} place of ${a}?`;
-   }
-   else if(topic==='Fractions'){let ds=g<=3?[2,4]:[2,4,5,10];let d=ds[randInt(0,ds.length-1)],x=randInt(1,d-1),y=randInt(1,d-x);ans=x+y;q=`${x}/${d} + ${y}/${d} = ?`;ans=`${ans}/${d}`}
-   else if(topic==='Decimals'){const places=g<=5?10:100; a=randInt(1,99)/places;b=randInt(1,99)/places;ans=+(a+b).toFixed(places===10?1:2);q=`${a} + ${b} = ?`}
-   else if(topic==='Algebra'){let x=randInt(1,12),a=randInt(2,9),b=randInt(-12,12),total=a*x+b;ans=x;q=`Solve: ${a}x ${b>=0?'+ '+b:'− '+Math.abs(b)} = ${total}`}
-   else if(topic==='Quadratics'){let r1=randInt(-8,8),r2=randInt(-8,8);while(r2===r1)r2=randInt(-8,8);let sum=r1+r2,prod=r1*r2;ans=r1;q=`If (x − ${r1}) (x − ${r2}) = 0, what is the smaller root?`;ans=Math.min(r1,r2)}
-   else if(topic==='Functions'){let x=randInt(-5,5),m=randInt(2,6),c=randInt(-8,8);ans=m*x+c;q=`If f(x) = ${m}x ${c>=0?'+ '+c:'− '+Math.abs(c)}, what is f(${x})?`}
-   else if(topic==='Percentages'){let base=randInt(20,200),pct=[10,20,25,50][randInt(0,3)];ans=base*pct/100;q=`What is ${pct}% of ${base}?`}
-   else if(topic==='Ratios'){let k=randInt(2,9),x=randInt(2,12);ans=x*k;q=`If 1 part = ${k}, what is ${x} parts?`}
-   else if(topic==='Integers'){a=randInt(-20,20);b=randInt(-20,20);ans=a+b;q=`${a} + (${b}) = ?`}
-   else if(topic==='Expressions'){a=randInt(2,12);b=randInt(2,12);ans=a*b+randInt(1,10);q=`${a} × ${b} + ? = ${ans}`;ans=ans-a*b}
-   else if(topic==='Geometry'){if(g>=9){let x=randInt(1,10),y=randInt(1,10);ans=x*x+y*y;q=`A right triangle has legs ${x} and ${y}. What is the square of its hypotenuse?`}else{let w=randInt(2,g<=5?12:20),h=randInt(2,g<=5?12:20);if(g<=4){ans=2*(w+h);q=`Rectangle: width ${w}, height ${h}. Perimeter = ?`}else{ans=w*h;q=`Rectangle: width ${w}, height ${h}. Area = ?`}}}
-   else if(topic==='Linear Equations'){a=randInt(2,12);ans=randInt(1,20);let c=randInt(1,20);let total=a*ans+c;q=`Solve: ${a}x + ${c} = ${total}`}
-   else if(topic==='Exponents'){a=randInt(2,6);b=randInt(2,4);ans=a**b;q=`${a}^${b} = ?`}
-   else {a=randInt(2,20);b=randInt(2,20);ans=a+b;q=`${a} + ${b} = ?`}
-   let opts=new Set([String(ans)]);while(opts.size<4){let delta=randInt(1,Math.max(2,Math.ceil(Math.abs(Number(ans))*0.2)||2));let candidate=Number(ans)+ (Math.random()<.5?-delta:delta);if(Number.isFinite(candidate)&&candidate>=0)opts.add(String(candidate))} 
-   qs.push({q,correct:String(ans),options:[...opts].sort(()=>Math.random()-.5)});
+  let q,correct,options;
+  if(g===8&&topic==='Algebra'){
+   const t=i%4;
+   if(t===0){const a=randInt(2,9),b=randInt(2,12),x=randInt(-5,8);correct=`${a}x + ${a*b}`;q=`Expand and simplify: ${a}(x + ${b})`;options=uniqueOptions(correct,()=>`${a+randInt(-2,2)}x + ${a*b+randInt(-6,6)}`)}
+   else if(t===1){const a=randInt(2,9),b=randInt(2,12);correct=`${a}x − ${a*b}`;q=`Expand and simplify: ${a}(x − ${b})`;options=uniqueOptions(correct,()=>`${a+randInt(-2,2)}x − ${a*b+randInt(-5,5)}`)}
+   else if(t===2){const a=randInt(2,6),b=randInt(2,7),c=randInt(2,6),d=randInt(2,7);correct=`${a*c}x² + ${a*d+b*c}x + ${b*d}`;q=`Expand: (${a}x + ${b})(${c}x + ${d})`;options=uniqueOptions(correct,()=>`${a*c}x² + ${a*d+b*c+randInt(1,4)}x + ${b*d}`)}
+   else {const a=randInt(2,9),b=randInt(2,12),c=randInt(2,9);correct=`${a+c}x + ${b}`;q=`Simplify: ${a}x + ${c}x + ${b}`;options=uniqueOptions(correct,()=>`${a+c+randInt(1,3)}x + ${b}`)}
+  } else if(g===9&&topic==='Algebra'){
+   const t=i%4;
+   if(t<3){const a=randInt(2,7),b=randInt(2,8),c=randInt(2,7),d=randInt(2,8);const A=a*c,B=a*d+b*c,C=b*d;correct=`${A}x² + ${B}x + ${C}`;q=`Expand and simplify: (${a}x + ${b})(${c}x + ${d})`;options=uniqueOptions(correct,()=>`${A}x² + ${B+randInt(-5,5)}x + ${C+randInt(-5,5)}`)}
+   else {const a=randInt(2,8),b=randInt(2,12),x=randInt(-5,8),total=a*x+b;correct=x;q=`Solve: ${a}x + ${b} = ${total}`;options=uniqueOptions(correct,()=>x+randInt(-4,4))}
+  } else if(g===9&&topic==='Quadratics'){
+   const r1=randInt(-8,5),r2=randInt(r1+1,9),B=-(r1+r2),C=r1*r2;
+   if(i%2===0){correct=`${r1}, ${r2}`;q=`Solve: x² ${B>=0?'+ '+B:'− '+Math.abs(B)}x ${C>=0?'+ '+C:'− '+Math.abs(C)} = 0`;options=[correct,`${r1+1}, ${r2}`,`${r1}, ${r2+1}`,`${-r1}, ${-r2}`].sort(()=>Math.random()-.5)}
+   else {correct=r1+r2;q=`For x² ${B>=0?'+ '+B:'− '+Math.abs(B)}x ${C>=0?'+ '+C:'− '+Math.abs(C)} = 0, what is the sum of the roots?`;options=uniqueOptions(correct,()=>correct+randInt(-5,5))}
+  } else if((g===8||g===9)&&topic==='Functions'){
+   const t=i%5,x=randInt(-5,6);
+   if(t===0){const a=randInt(2,6);correct=a*a;q=`Function machine: input ${a} → square the number → output ?`;options=uniqueOptions(correct,()=>a*a+randInt(1,8))}
+   else if(t===1){const a=randInt(2,5);correct=a*a*a;q=`Function machine: input ${a} → cube the number → output ?`;options=uniqueOptions(correct,()=>a*a+randInt(2,10))}
+   else if(t===2){const a=randInt(2,7),b=randInt(1,9);correct=a*x+b;q=`Function machine: ×${a}, then +${b}. Input ${x}. Output ?`;options=uniqueOptions(correct,()=>correct+randInt(-8,8))}
+   else if(t===3){const a=randInt(2,6),b=randInt(1,8);correct=(x+b)*a;q=`Function machine: +${b}, then ×${a}. Input ${x}. Output ?`;options=uniqueOptions(correct,()=>correct+randInt(-8,8))}
+   else {const a=randInt(2,5),b=randInt(1,8);correct=a*x*x+b;q=`If f(x) = ${a}x² + ${b}, find f(${x}).`;options=uniqueOptions(correct,()=>correct+randInt(-12,12))}
+  } else if((g===8||g===9)&&topic==='Geometry'){
+   const t=i%5;
+   if(t===0){const r=3;correct=(Math.PI*r*r).toFixed(2);q=`Find the area of a circle with radius ${r} cm. Give your answer to 2 d.p.`;options=uniqueOptions(correct,()=>((Math.PI*r*r)+randInt(-8,8)).toFixed(2))}
+   else if(t===1){const r=randInt(2,8);correct=(4*Math.PI*r*r*r/3).toFixed(2);q=`Find the volume of a sphere with radius ${r} cm. Give your answer to 2 d.p.`;options=uniqueOptions(correct,()=>((4*Math.PI*r*r*r/3)+randInt(-20,20)).toFixed(2))}
+   else if(t===2){const r=randInt(2,7),h=randInt(4,12);correct=(Math.PI*r*r*h).toFixed(2);q=`Find the volume of a cylinder with radius ${r} cm and height ${h} cm. Give your answer to 2 d.p.`;options=uniqueOptions(correct,()=>((Math.PI*r*r*h)+randInt(-25,25)).toFixed(2))}
+   else if(t===3){const l=randInt(3,12),w=randInt(3,10),h=randInt(3,9);correct=l*w*h;q=`Find the volume of a cuboid ${l} cm × ${w} cm × ${h} cm.`;options=uniqueOptions(correct,()=>correct+randInt(-20,20))}
+   else {const b=randInt(4,12),h=randInt(4,12),L=randInt(5,12);correct=b*h*L/2;q=`A triangular prism has triangular base ${b} cm, perpendicular height ${h} cm and length ${L} cm. Find its volume.`;options=uniqueOptions(correct,()=>correct+randInt(-20,20))}
+  } else {
+   let a,b;
+   if(topic==='Addition'){const max=g===1?10:g===2?50:g<=5?200:1000;a=randInt(0,max);b=randInt(0,max-a);correct=a+b;q=`${a} + ${b} = ?`}
+   else if(topic==='Subtraction'){const max=g===1?10:g===2?50:g<=5?200:1000;a=randInt(0,max);b=randInt(0,a);correct=a-b;q=`${a} − ${b} = ?`}
+   else if(topic==='Addition & Subtraction'){a=randInt(10,99);b=randInt(1,Math.min(50,a));const sub=Math.random()<.5;correct=sub?a-b:a+b;q=sub?`${a} − ${b} = ?`:`${a} + ${b} = ?`}
+   else if(topic==='Multiplication'){a=randInt(1,g<=3?10:20);b=randInt(1,g<=5?12:30);correct=a*b;q=`${a} × ${b} = ?`}
+   else if(topic==='Division'){b=randInt(2,12);correct=randInt(1,25);a=b*correct;q=`${a} ÷ ${b} = ?`}
+   else if(topic==='Exponents'){a=randInt(2,6);b=randInt(2,4);correct=a**b;q=`${a}^${b} = ?`}
+   else if(topic==='Linear Equations'){a=randInt(2,12);const x=randInt(-5,15),c=randInt(1,15);correct=x;q=`Solve: ${a}x + ${c} = ${a*x+c}`}
+   else if(topic==='Geometry'){const w=randInt(2,20),h=randInt(2,20);correct=w*h;q=`Rectangle: width ${w}, height ${h}. Area = ?`}
+   else {a=randInt(2,20);b=randInt(2,20);correct=a+b;q=`${a} + ${b} = ?`}
+   options=uniqueOptions(correct,()=>Number(correct)+randInt(-10,10));
+  }
+  qs.push({q,correct:String(correct),options:options||uniqueOptions(correct,()=>Number(correct)+randInt(-10,10))});
  }
  return qs;
 }
@@ -486,7 +496,6 @@ function renderMathQuestion(){
  $('mathContent').innerHTML=`<div class="game-header"><div><span class="badge">Grade ${mathGrade} • ${escapeHtml(mathTopic)}</span><h1 style="margin:10px 0 0">Math Challenge</h1></div><button class="danger" onclick="goHome()">✕</button></div>
  <div class="math-quiz"><div class="progress-track"><div class="progress-bar" style="width:${mathIndex/mathQuestions.length*100}%"></div></div>
  <div class="question-meta"><span>Question ${mathIndex+1} of ${mathQuestions.length}</span><span>Score ${mathScore}</span></div>
- <div class="dino-zone"><div class="sparkles" id="sparkles"><span>⭐</span><span>✨</span><span>🌟</span><span>💫</span></div><div class="dino idle" id="dino">🦖</div><div class="dino-name" id="dinoName">Rex is ready for Grade ${mathGrade}! 🦖</div></div><div class="fun-feedback" id="funFeedback"></div>
  <div class="math-question">${escapeHtml(q.q)}</div>
  <div class="math-answer-grid">${q.options.map((a,i)=>`<button class="math-answer" onclick="answerMath(${i})">${escapeHtml(a)}</button>`).join('')}</div></div>`;
 }
