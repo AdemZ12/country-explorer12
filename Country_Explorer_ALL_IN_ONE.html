@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Country Explorer</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#071b3a,#301b66 55%,#087c82);color:#fff;min-height:100vh}
+button,input{font:inherit}button{cursor:pointer;border:0}.app{max-width:1200px;margin:auto;min-height:100vh;padding:18px 18px 90px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.logo{font-size:26px;font-weight:900}.logo span{font-size:32px}
+.iconbtn{width:46px;height:46px;border-radius:15px;background:#ffffff18;color:#fff;font-size:22px}.pill{background:#ffffff16;padding:10px 15px;border-radius:20px;font-weight:800}
+.page{display:none}.page.active{display:block}.hero{padding:30px;border-radius:28px;background:linear-gradient(135deg,#ffffff18,#ffffff08);border:1px solid #ffffff1d;box-shadow:0 20px 60px #0002}
+h1{font-size:clamp(32px,6vw,60px);margin:0 0 10px}.sub{color:#dbe5ff;line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:20px}.card{background:#ffffff12;border:1px solid #ffffff1b;border-radius:22px;padding:20px;backdrop-filter:blur(12px)}.card h3{margin-top:0}
+.bigbtn{padding:16px 20px;border-radius:16px;background:#fff;color:#17214c;font-weight:900;margin:7px 5px 0 0}.secondary{background:#ffffff18;color:#fff}
+.nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);width:min(760px,94%);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:#08172ee8;border:1px solid #ffffff20;border-radius:22px;padding:8px;backdrop-filter:blur(15px);z-index:20}.nav button{background:transparent;color:#cbd7ff;padding:10px 4px;border-radius:15px;font-size:12px}.nav button.active{background:#ffffff18;color:#fff;font-weight:900}
+.globe{height:390px;width:390px;max-width:80vw;max-height:80vw;margin:15px auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#45d8ff,#1670bd 45%,#071f55 75%);box-shadow:inset -35px -20px 70px #001a45,0 0 50px #38d8ff33;position:relative;overflow:hidden;touch-action:none}
+.globe:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 44px,#ffffff14 45px 46px),repeating-linear-gradient(90deg,transparent 0 55px,#ffffff12 56px 57px);border-radius:50%}
+.marker{position:absolute;width:10px;height:10px;background:#ffe34d;border:2px solid #fff;border-radius:50%;box-shadow:0 0 14px #ffe34d;transform:translate(-50%,-50%);transition:.2s}.marker:hover{transform:translate(-50%,-50%) scale(1.8)}
+.search{display:flex;gap:10px;margin:10px 0}.search input{flex:1;padding:14px 16px;border-radius:15px;border:1px solid #ffffff20;background:#ffffff12;color:#fff;outline:none}.search input::placeholder{color:#b8c4df}
+.country{display:flex;align-items:center;gap:16px}.flag{font-size:54px}.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:15px}.factbox{background:#ffffff0e;padding:14px;border-radius:15px}.factbox b{display:block;font-size:12px;color:#aebce0;margin-bottom:5px}
+.modegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.mode{padding:18px;border-radius:18px;background:#ffffff10;color:#fff;text-align:left;border:1px solid #ffffff18}.mode strong{display:block;font-size:20px;margin-bottom:5px}.mode small{color:#bdc9e8}.mode:hover{background:#ffffff1b}
+.gamebox{max-width:780px;margin:auto}.topgame{display:flex;justify-content:space-between;align-items:center}.progress{height:10px;background:#ffffff18;border-radius:10px;overflow:hidden;margin:15px 0 25px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#53e6ff,#a46cff);width:0}.question{font-size:28px;font-weight:900;line-height:1.25}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.answer{padding:18px;border-radius:17px;background:#ffffff10;color:#fff;text-align:left;border:1px solid #ffffff18}.answer:hover{background:#ffffff1c}.answer.correct{background:#16a36d88}.answer.wrong{background:#d34c6888}.feedback{min-height:30px;margin-top:15px;font-weight:900}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.show{display:flex}.modalbox{max-width:430px;width:100%;background:#13254d;border:1px solid #ffffff20;border-radius:25px;padding:25px}
+.stat{font-size:34px;font-weight:900}.badge{display:inline-block;padding:10px 14px;background:#ffffff12;border-radius:14px;margin:5px}.success{color:#65f0bd}.muted{color:#aebce0}.factday{font-size:25px;line-height:1.5}.list{line-height:1.8}
+@media(max-width:650px){.modegrid,.answers{grid-template-columns:1fr}.nav button{font-size:10px}.globe{height:300px;width:300px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="logo"><span>🌍</span> Country Explorer</div><div class="pill" id="streak">🔥 Streak: 1</div><button class="iconbtn" onclick="showPage('stats')">⚙️</button></header>
+
+<section id="home" class="page active">
+<div class="hero"><h1>Explore the world.<br>Play. Learn. Win.</h1><p class="sub">Discover countries, test your geography knowledge and build your streak.</p><button class="bigbtn" onclick="showPage('map')">🗺️ Explore Map</button><button class="bigbtn secondary" onclick="showPage('game')">🎮 Play Game</button></div>
+<div class="grid"><div class="card"><h3>🔥 Daily Streak</h3><div class="stat" id="homeStreak">1</div><p class="muted">Keep coming back every day.</p></div><div class="card"><h3>🏆 Games Won</h3><div class="stat" id="homeWins">0</div></div><div class="card"><h3>⭐ XP</h3><div class="stat" id="homeXP">0</div></div></div>
+</section>
+
+<section id="map" class="page">
+<div class="hero"><h2>🗺️ My Map</h2><div class="search"><input id="search" placeholder="Search a country..." oninput="searchCountry()"><button class="bigbtn" onclick="randomCountry()">🎲 Random</button></div>
+<div class="globe" id="globe"></div><div id="countryInfo" class="card"></div></div>
+</section>
+
+<section id="game" class="page">
+<div class="hero gamebox" id="gameMenu"><h2>🎮 My Game</h2><p class="sub">Choose your difficulty. Every level gets harder.</p><div class="modegrid">
+<button class="mode" onclick="startGame('Easy')"><strong>🟢 Easy</strong><small>5 questions · common capitals & flags</small></button>
+<button class="mode" onclick="startGame('Medium')"><strong>🔵 Medium</strong><small>7 questions · capitals, flags & currencies</small></button>
+<button class="mode" onclick="startGame('Hard')"><strong>🟠 Hard</strong><small>10 questions · mixed knowledge</small></button>
+<button class="mode" onclick="startGame('Impossible')"><strong>🔴 Impossible</strong><small>12 questions · tricky geography</small></button>
+</div></div>
+<div class="hero gamebox" id="gamePlay" style="display:none">
+<div class="topgame"><b id="difficulty"></b><button class="iconbtn" onclick="confirmLeave()">✕</button></div><div class="progress"><i id="bar"></i></div><div class="muted" id="qnum"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div></div>
+<div class="hero gamebox" id="results" style="display:none;text-align:center"></div>
+</section>
+
+<section id="fact" class="page"><div class="hero"><h2>💡 Fun Fact of the Day</h2><div class="card"><div class="factday" id="dailyFact"></div><p class="muted" id="factCountry"></p></div><button class="bigbtn" onclick="newFact()">🔄 Another Fact</button></div></section>
+
+<section id="stats" class="page"><div class="hero"><h2>📊 Your Stats</h2><div class="grid"><div class="card"><h3>🏆 Games Won</h3><div class="stat" id="wins">0</div></div><div class="card"><h3>⚡ Fastest Win</h3><div class="stat" id="fastest">—</div></div><div class="card"><h3>⭐ XP</h3><div class="stat" id="xp">0</div></div><div class="card"><h3>🎯 Accuracy</h3><div class="stat" id="accuracy">0%</div></div><div class="card"><h3>🔥 Streak</h3><div class="stat" id="statsStreak">1</div></div><div class="card"><h3>🎮 Games Played</h3><div class="stat" id="played">0</div></div></div><h3>🏅 Achievements</h3><div id="badges"></div></div></section>
+</div>
+
+<div class="nav"><button onclick="showPage('home')" id="n-home">🏠<br>Home</button><button onclick="showPage('map')" id="n-map">🗺️<br>My Map</button><button onclick="showPage('game')" id="n-game">🎮<br>My Game</button><button onclick="showPage('fact')" id="n-fact">💡<br>Fun Fact</button><button onclick="showPage('stats')" id="n-stats">📊<br>Stats</button></div>
+
+<div class="modal" id="leaveModal"><div class="modalbox"><h2>Leave game session?</h2><p class="muted">Your current game progress will be lost.</p><button class="bigbtn" onclick="leaveGame()">Leave Game</button><button class="bigbtn secondary" onclick="closeModal()">Keep Playing</button></div></div>
+
+<script>
+const countries=[
+["Afghanistan","🇦🇫","Kabul","Afghani","Asia",42.2,652230,33.94,67.71],
+["Albania","🇦🇱","Tirana","Lek","Europe",2.8,28748,41.15,20.17],
+["Algeria","🇩🇿","Algiers","Algerian dinar","Africa",46,2381741,28.03,1.66],
+["Argentina","🇦🇷","Buenos Aires","Argentine peso","South America",45.8,2780400,-38.42,-63.62],
+["Australia","🇦🇺","Canberra","Australian dollar","Oceania",27.2,7692024,-25.27,133.78],
+["Austria","🇦🇹","Vienna","Euro","Europe",9.2,83871,47.52,14.55],
+["Belgium","🇧🇪","Brussels","Euro","Europe",11.8,30528,50.85,4.35],
+["Brazil","🇧🇷","Brasília","Brazilian real","South America",212.6,8515767,-10.81,-52.97],
+["Canada","🇨🇦","Ottawa","Canadian dollar","North America",40.8,9984670,56.13,-106.35],
+["Chile","🇨🇱","Santiago","Chilean peso","South America",19.8,756102,-33.45,-70.67],
+["China","🇨🇳","Beijing","Renminbi","Asia",1410,9596961,35.86,104.20],
+["Colombia","🇨🇴","Bogotá","Colombian peso","South America",52.9,1141748,4.57,-74.30],
+["Croatia","🇭🇷","Zagreb","Euro","Europe",3.9,56594,45.10,15.20],
+["Czechia","🇨🇿","Prague","Czech koruna","Europe",10.9,78871,49.82,15.47],
+["Denmark","🇩🇰","Copenhagen","Danish krone","Europe",6,43094,56.26,9.50],
+["Egypt","🇪🇬","Cairo","Egyptian pound","Africa",116,1002450,26.82,30.80],
+["Finland","🇫🇮","Helsinki","Euro","Europe",5.6,338455,64.00,26.00],
+["France","🇫🇷","Paris","Euro","Europe",68.6,551695,46.23,2.21],
+["Germany","🇩🇪","Berlin","Euro","Europe",84.5,357022,51.17,10.45],
+["Greece","🇬🇷","Athens","Euro","Europe",10.3,131957,39.07,21.82],
+["Hungary","🇭🇺","Budapest","Forint","Europe",9.6,93028,47.16,19.50],
+["Iceland","🇮🇸","Reykjavík","Icelandic króna","Europe",0.4,103000,64.96,-19.02],
+["India","🇮🇳","New Delhi","Indian rupee","Asia",1460,3287263,20.59,78.96],
+["Indonesia","🇮🇩","Jakarta","Rupiah","Asia",285,1904569,-0.79,113.92],
+["Ireland","🇮🇪","Dublin","Euro","Europe",5.4,70273,53.14,-7.69],
+["Israel","🇮🇱","Jerusalem","New shekel","Asia",10.1,22072,31.05,34.85],
+["Italy","🇮🇹","Rome","Euro","Europe",58.7,301340,41.87,12.57],
+["Japan","🇯🇵","Tokyo","Yen","Asia",123.8,377975,36.20,138.25],
+["Kenya","🇰🇪","Nairobi","Kenyan shilling","Africa",57.5,580367,-0.02,37.91],
+["Luxembourg","🇱🇺","Luxembourg City","Euro","Europe",0.68,2586,49.81,6.13],
+["Malaysia","🇲🇾","Kuala Lumpur","Ringgit","Asia",35.9,330803,-4.21,101.98],
+["Mexico","🇲🇽","Mexico City","Mexican peso","North America",132,1964375,23.63,-102.55],
+["Morocco","🇲🇦","Rabat","Moroccan dirham","Africa",38,446550,31.79,-7.09],
+["Netherlands","🇳🇱","Amsterdam","Euro","Europe",18.1,41543,52.13,5.29],
+["New Zealand","🇳🇿","Wellington","New Zealand dollar","Oceania",5.4,268021,-40.90,174.89],
+["Nigeria","🇳🇬","Abuja","Naira","Africa",239,923768,9.08,8.68],
+["Norway","🇳🇴","Oslo","Norwegian krone","Europe",5.6,385207,60.47,8.47],
+["Pakistan","🇵🇰","Islamabad","Pakistani rupee","Asia",257,881913,30.38,69.35],
+["Peru","🇵🇪","Lima","Sol","South America",34.6,1285216,-9.19,-75.02],
+["Poland","🇵🇱","Warsaw","Złoty","Europe",36.5,312696,51.92,19.15],
+["Portugal","🇵🇹","Lisbon","Euro","Europe",10.4,92212,39.40,-8.22],
+["Romania","🇷🇴","Bucharest","Romanian leu","Europe",19,238397,45.94,24.97],
+["Saudi Arabia","🇸🇦","Riyadh","Saudi riyal","Asia",34.6,2149690,23.89,45.08],
+["Serbia","🇷🇸","Belgrade","Serbian dinar","Europe",6.6,88361,44.02,21.01],
+["Singapore","🇸🇬","Singapore","Singapore dollar","Asia",6.1,734,1.35,103.82],
+["Slovakia","🇸🇰","Bratislava","Euro","Europe",5.4,49035,48.67,19.70],
+["Slovenia","🇸🇮","Ljubljana","Euro","Europe",2.1,20273,46.15,14.99],
+["South Africa","🇿🇦","Pretoria","Rand","Africa",63,1221037,-30.56,22.94],
+["South Korea","🇰🇷","Seoul","Won","Asia",51.7,100210,35.91,127.77],
+["Spain","🇪🇸","Madrid","Euro","Europe",49,505370,40.46,-3.75],
+["Sweden","🇸🇪","Stockholm","Swedish krona","Europe",10.7,450295,62.20,15.64],
+["Switzerland","🇨🇭","Bern","Swiss franc","Europe",9.1,41284,46.82,8.23],
+["Tunisia","🇹🇳","Tunis","Tunisian dinar","Africa",12.3,163610,33.89,9.54],
+["Türkiye","🇹🇷","Ankara","Turkish lira","Asia",87.7,783562,38.96,35.24],
+["Ukraine","🇺🇦","Kyiv","Hryvnia","Europe",37.9,603500,48.38,31.17],
+["United Arab Emirates","🇦🇪","Abu Dhabi","UAE dirham","Asia",11.3,83600,23.42,53.85],
+["United Kingdom","🇬🇧","London","Pound sterling","Europe",69.5,243610,55.38,-3.44],
+["United States","🇺🇸","Washington, D.C.","US dollar","North America",347,9833517,39.83,-98.58],
+["Vietnam","🇻🇳","Hanoi","Dong","Asia",101.6,331212,14.06,108.28]
+];
+
+const facts=[
+["Japan","Japan has one of the world's longest life expectancies and is made up of thousands of islands."],
+["Luxembourg","Luxembourg is one of the world's smallest countries and is a founding member of several European institutions."],
+["Australia","Australia is both a country and a continent, and its interior includes the famous Outback."],
+["Brazil","Brazil is home to a large part of the Amazon rainforest."],
+["Canada","Canada has the world's longest coastline."],
+["Egypt","The ancient pyramids at Giza are among the world's most famous surviving monuments."],
+["Iceland","Iceland is known for volcanoes, glaciers, geothermal energy and the Northern Lights."],
+["Switzerland","Switzerland is famous for the Alps, watches, chocolate and a federal political system."],
+["India","India is home to one of the world's largest and most diverse populations."],
+["South Africa","South Africa has three capital cities with different governmental functions."]
+];
+
+let stats=JSON.parse(localStorage.getItem("ceStats")||'{"wins":0,"fastest":0,"xp":0,"played":0,"correct":0,"total":0,"streak":1}');
+let game={};let factIndex=new Date().getDate()%facts.length;
+
+function save(){localStorage.setItem("ceStats",JSON.stringify(stats));updateStats()}
+function updateStats(){
+["wins","xp","played","correct","total"].forEach(k=>{let e=document.getElementById(k);if(e)e.textContent=stats[k]});
+document.getElementById("homeWins").textContent=stats.wins;document.getElementById("homeXP").textContent=stats.xp;document.getElementById("homeStreak").textContent=stats.streak;document.getElementById("streak").textContent="🔥 Streak: "+stats.streak;document.getElementById("statsStreak").textContent=stats.streak;
+document.getElementById("accuracy").textContent=stats.total?Math.round(stats.correct/stats.total*100)+"%":"0%";document.getElementById("fastest").textContent=stats.fastest?stats.fastest+"s":"—";
+let badges=[];if(stats.wins>=1)badges.push("🥉 First Win");if(stats.wins>=5)badges.push("🏆 Explorer");if(stats.xp>=100)badges.push("⭐ 100 XP");if(stats.streak>=7)badges.push("🔥 7-Day Streak");if(stats.total>=50)badges.push("🧠 Geography Brain");document.getElementById("badges").innerHTML=badges.length?badges.map(x=>`<span class="badge">${x}</span>`).join(""):"<span class='muted'>Play games to unlock achievements.</span>";
+}
+function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("n-"+id);if(n)n.classList.add("active");if(id==="stats")updateStats();if(id==="fact")renderFact();if(id==="map"&&!document.getElementById("countryInfo").innerHTML)showCountry(countries[0])}
+function showCountry(c){let pop=c[5],share=(pop/8200*100).toFixed(2);document.getElementById("countryInfo").innerHTML=`<div class="country"><div class="flag">${c[1]}</div><div><h2>${c[0]}</h2><div class="muted">${c[4]}</div></div></div><div class="facts"><div class="factbox"><b>CAPITAL</b>${c[2]}</div><div class="factbox"><b>CURRENCY</b>${c[3]}</div><div class="factbox"><b>POPULATION</b>${pop}M</div><div class="factbox"><b>WORLD POP. SHARE</b>${share}%</div><div class="factbox"><b>LAND AREA</b>${c[6].toLocaleString()} km²</div><div class="factbox"><b>COORDINATES</b>${c[7].toFixed(2)}, ${c[8].toFixed(2)}</div></div>`}
+function renderMarkers(){let g=document.getElementById("globe");g.innerHTML="";countries.forEach(c=>{let x=50+c[8]/180*45,y=50-c[7]/90*45;let m=document.createElement("button");m.className="marker";m.style.left=x+"%";m.style.top=y+"%";m.title=c[0];m.onclick=()=>showCountry(c);g.appendChild(m)})}
+function searchCountry(){let q=document.getElementById("search").value.toLowerCase();let c=countries.find(x=>x[0].toLowerCase().includes(q));if(c)showCountry(c)}
+function randomCountry(){showCountry(countries[Math.floor(Math.random()*countries.length)])}
+renderMarkers();showCountry(countries[0]);renderFact();updateStats();
+
+function renderFact(){let f=facts[factIndex];document.getElementById("dailyFact").textContent="🌎 "+f[1];document.getElementById("factCountry").textContent="Country: "+f[0]}
+function newFact(){factIndex=(factIndex+1)%facts.length;renderFact()}
+
+const configs={Easy:{n:5,types:["capital","flag"]},Medium:{n:7,types:["capital","flag","currency"]},Hard:{n:10,types:["capital","flag","currency","population","continent"]},Impossible:{n:12,types:["capital","flag","currency","population","continent","area","coordinates"]}};
+function shuffle(a){return a.sort(()=>Math.random()-.5)}
+function makeQuestion(type,c){
+let key="",correct="";
+if(type==="capital"){key=`What is the capital of ${c[0]}?`;correct=c[2]}
+if(type==="flag"){key=`Which flag represents ${c[0]}?`;correct=c[1]}
+if(type==="currency"){key=`What currency is used in ${c[0]}?`;correct=c[3]}
+if(type==="population"){key=`Which population is closest to ${c[0]}?`;correct=c[5]+" million"}
+if(type==="continent"){key=`Which continent is ${c[0]} in?`;correct=c[4]}
+if(type==="area"){key=`Which land area is closest to ${c[0]}?`;correct=c[6].toLocaleString()+" km²"}
+if(type==="coordinates"){key=`Which coordinates are closest to ${c[0]}?`;correct=c[7].toFixed(1)+"°, "+c[8].toFixed(1)+"°"}
+let opts=shuffle([correct,...shuffle(countries.filter(x=>x!==c).map(x=>{
+if(type==="capital")return x[2];if(type==="flag")return x[1];if(type==="currency")return x[3];if(type==="population")return x[5]+" million";if(type==="continent")return x[4];if(type==="area")return x[6].toLocaleString()+" km²";return x[7].toFixed(1)+"°, "+x[8].toFixed(1)+"°"
+})).slice(0,3)]);
+return {key,correct,opts}
+}
+function startGame(level){
+let cfg=configs[level];game={level,questions:[],i:0,score:0,start:Date.now(),locked:false};
+for(let i=0;i<cfg.n;i++){let c=countries[Math.floor(Math.random()*countries.length)],type=cfg.types[Math.floor(Math.random()*cfg.types.length)];game.questions.push(makeQuestion(type,c))}
+document.getElementById("gameMenu").style.display="none";document.getElementById("results").style.display="none";document.getElementById("gamePlay").style.display="block";document.getElementById("difficulty").textContent="🎮 "+level;showQuestion()
+}
+function showQuestion(){
+let q=game.questions[game.i];game.locked=false;document.getElementById("qnum").textContent=`Question ${game.i+1} of ${game.questions.length}`;document.getElementById("bar").style.width=(game.i/game.questions.length*100)+"%";document.getElementById("question").textContent=q.key;document.getElementById("feedback").textContent="";
+document.getElementById("answers").innerHTML=q.opts.map((x,i)=>`<button class="answer" onclick="answer(this,${JSON.stringify(x).replace(/</g,"\\u003c")})"><b>${i+1}.</b> ${x}</button>`).join("")
+}
+function answer(btn,val){
+if(game.locked)return;game.locked=true;let q=game.questions[game.i],buttons=[...document.querySelectorAll(".answer")];buttons.forEach(b=>{if(b.textContent.includes(q.correct))b.classList.add("correct")});if(val===q.correct){game.score++;btn.classList.add("correct");document.getElementById("feedback").innerHTML="<span class='success'>✓ Correct!</span>"}else{btn.classList.add("wrong");document.getElementById("feedback").textContent="✗ Not quite — correct answer: "+q.correct}
+stats.total++;if(val===q.correct)stats.correct++;save();setTimeout(()=>{game.i++;if(game.i<game.questions.length)showQuestion();else finishGame()},850)
+}
+function finishGame(){
+let seconds=Math.round((Date.now()-game.start)/1000),perfect=game.score===game.questions.length;stats.played++;stats.xp+=game.score*10+(perfect?25:0);if(perfect){stats.wins++;if(!stats.fastest||seconds<stats.fastest)stats.fastest=seconds}save();
+document.getElementById("gamePlay").style.display="none";let r=document.getElementById("results");r.style.display="block";r.innerHTML=`<h2>${perfect?"🎉 PERFECT SCORE!":"🏁 Game Complete"}</h2><div class="stat">${game.score}/${game.questions.length}</div><p>${Math.round(game.score/game.questions.length*100)}% correct · ${seconds}s</p><p class="muted">${perfect?"Amazing! You mastered this challenge.":"Keep practicing and try the next difficulty."}</p><button class="bigbtn" onclick="startGame('${game.level}')">🔄 Play Again</button><button class="bigbtn secondary" onclick="leaveGame()">🏠 Back to Game Menu</button>`
+}
+function confirmLeave(){document.getElementById("leaveModal").classList.add("show")}
+function closeModal(){document.getElementById("leaveModal").classList.remove("show")}
+function leaveGame(){closeModal();document.getElementById("gamePlay").style.display="none";document.getElementById("results").style.display="none";document.getElementById("gameMenu").style.display="block";showPage("game")}
+</script>
+</body>
+</html>
