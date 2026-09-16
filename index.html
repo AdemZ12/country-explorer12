@@ -2,196 +2,1489 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Country Explorer</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Country Explorer EDU</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:linear-gradient(135deg,#071b3a,#301b66 55%,#087c82);color:#fff;min-height:100vh}
-button,input{font:inherit}button{cursor:pointer;border:0}.app{max-width:1200px;margin:auto;min-height:100vh;padding:18px 18px 90px}
-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.logo{font-size:26px;font-weight:900}.logo span{font-size:32px}
-.iconbtn{width:46px;height:46px;border-radius:15px;background:#ffffff18;color:#fff;font-size:22px}.pill{background:#ffffff16;padding:10px 15px;border-radius:20px;font-weight:800}
-.page{display:none}.page.active{display:block}.hero{padding:30px;border-radius:28px;background:linear-gradient(135deg,#ffffff18,#ffffff08);border:1px solid #ffffff1d;box-shadow:0 20px 60px #0002}
-h1{font-size:clamp(32px,6vw,60px);margin:0 0 10px}.sub{color:#dbe5ff;line-height:1.6}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:20px}.card{background:#ffffff12;border:1px solid #ffffff1b;border-radius:22px;padding:20px;backdrop-filter:blur(12px)}.card h3{margin-top:0}
-.bigbtn{padding:16px 20px;border-radius:16px;background:#fff;color:#17214c;font-weight:900;margin:7px 5px 0 0}.secondary{background:#ffffff18;color:#fff}
-.nav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);width:min(760px,94%);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:#08172ee8;border:1px solid #ffffff20;border-radius:22px;padding:8px;backdrop-filter:blur(15px);z-index:20}.nav button{background:transparent;color:#cbd7ff;padding:10px 4px;border-radius:15px;font-size:12px}.nav button.active{background:#ffffff18;color:#fff;font-weight:900}
-.globe{height:390px;width:390px;max-width:80vw;max-height:80vw;margin:15px auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#45d8ff,#1670bd 45%,#071f55 75%);box-shadow:inset -35px -20px 70px #001a45,0 0 50px #38d8ff33;position:relative;overflow:hidden;touch-action:none}
-.globe:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent 0 44px,#ffffff14 45px 46px),repeating-linear-gradient(90deg,transparent 0 55px,#ffffff12 56px 57px);border-radius:50%}
-.marker{position:absolute;width:10px;height:10px;background:#ffe34d;border:2px solid #fff;border-radius:50%;box-shadow:0 0 14px #ffe34d;transform:translate(-50%,-50%);transition:.2s}.marker:hover{transform:translate(-50%,-50%) scale(1.8)}
-.search{display:flex;gap:10px;margin:10px 0}.search input{flex:1;padding:14px 16px;border-radius:15px;border:1px solid #ffffff20;background:#ffffff12;color:#fff;outline:none}.search input::placeholder{color:#b8c4df}
-.country{display:flex;align-items:center;gap:16px}.flag{font-size:54px}.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:15px}.factbox{background:#ffffff0e;padding:14px;border-radius:15px}.factbox b{display:block;font-size:12px;color:#aebce0;margin-bottom:5px}
-.modegrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.mode{padding:18px;border-radius:18px;background:#ffffff10;color:#fff;text-align:left;border:1px solid #ffffff18}.mode strong{display:block;font-size:20px;margin-bottom:5px}.mode small{color:#bdc9e8}.mode:hover{background:#ffffff1b}
-.gamebox{max-width:780px;margin:auto}.topgame{display:flex;justify-content:space-between;align-items:center}.progress{height:10px;background:#ffffff18;border-radius:10px;overflow:hidden;margin:15px 0 25px}.progress i{display:block;height:100%;background:linear-gradient(90deg,#53e6ff,#a46cff);width:0}.question{font-size:28px;font-weight:900;line-height:1.25}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.answer{padding:18px;border-radius:17px;background:#ffffff10;color:#fff;text-align:left;border:1px solid #ffffff18}.answer:hover{background:#ffffff1c}.answer.correct{background:#16a36d88}.answer.wrong{background:#d34c6888}.feedback{min-height:30px;margin-top:15px;font-weight:900}.modal{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:20px;z-index:50}.modal.show{display:flex}.modalbox{max-width:430px;width:100%;background:#13254d;border:1px solid #ffffff20;border-radius:25px;padding:25px}
-.stat{font-size:34px;font-weight:900}.badge{display:inline-block;padding:10px 14px;background:#ffffff12;border-radius:14px;margin:5px}.success{color:#65f0bd}.muted{color:#aebce0}.factday{font-size:25px;line-height:1.5}.list{line-height:1.8}
-@media(max-width:650px){.modegrid,.answers{grid-template-columns:1fr}.nav button{font-size:10px}.globe{height:300px;width:300px}}
+:root{
+--bg:#071a3d;--purple:#6c63ff;--purple2:#9b5cff;--white:#fff;
+--text:#17213b;--muted:#69758b;--good:#10b981;--bad:#ef476f;
+}
+*{box-sizing:border-box}
+body{
+margin:0;font-family:Arial,Helvetica,sans-serif;color:white;
+background:linear-gradient(135deg,#071a3d,#35206b,#087f86);
+min-height:100vh
+}
+button{font:inherit;cursor:pointer;border:0}
+.app{max-width:1350px;margin:auto;padding:18px 20px 80px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.brand{font-size:25px;font-weight:900}
+.top-actions{display:flex;gap:10px;align-items:center}
+.pill,.icon-btn{background:#ffffff20;color:white;border:1px solid #ffffff30}
+.pill{padding:10px 15px;border-radius:30px;font-weight:800}
+.icon-btn{width:45px;height:45px;border-radius:14px;font-size:20px}
+.screen{display:none}.screen.active{display:block}
+.hero{text-align:center;padding:45px 10px 25px}
+.hero h1{font-size:clamp(40px,7vw,75px);margin:0 0 15px}
+.hero p{max-width:750px;margin:auto;color:#dce5ff;font-size:18px;line-height:1.6}
+.gradient{background:linear-gradient(90deg,#fff,#bcefff,#d8c8ff);
+-webkit-background-clip:text;color:transparent}
+.home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card,.panel{background:#fffffff2;color:var(--text);border-radius:25px;padding:25px;box-shadow:0 20px 60px #0003}
+.card{min-height:250px;display:flex;flex-direction:column;justify-content:space-between;transition:.2s}
+.card:hover{transform:translateY(-5px)}
+.emoji{font-size:50px}.card h2{font-size:27px;margin:10px 0}
+.card p{color:var(--muted);line-height:1.5}
+.primary{background:linear-gradient(135deg,var(--purple),var(--purple2));color:white;padding:13px 18px;border-radius:14px;font-weight:900}
+.secondary{background:#eef1f7;color:var(--text);padding:12px 18px;border-radius:13px;font-weight:800}
+.danger{background:var(--bad);color:white;padding:11px 15px;border-radius:13px;font-weight:900}
+.back{background:#ffffff20;color:white;padding:10px 15px;border-radius:13px;font-weight:800}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.badge{display:inline-block;background:#eeedff;color:#5b55d8;padding:6px 10px;border-radius:20px;font-size:12px;font-weight:900}
+.learning{max-width:1100px;margin:auto}
+.grade-grid,.topic-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:20px}
+.choice{
+background:#f3f6fb;color:var(--text);padding:19px;border-radius:18px;
+text-align:left;font-weight:900;border:2px solid transparent;transition:.15s
+}
+.choice:hover{background:#e8edff;transform:translateY(-3px)}
+.choice small{display:block;color:var(--muted);margin-top:7px;font-weight:600}
+.mastery{margin-top:10px}.mastery-head{display:flex;justify-content:space-between;font-size:12px}
+.mastery-track{height:8px;background:#e5e8ef;border-radius:20px;margin-top:5px;overflow:hidden}
+.mastery-fill{height:100%;background:linear-gradient(90deg,#6c63ff,#18c8b0)}
+.quiz{max-width:900px;margin:20px auto}
+.progress{height:10px;background:#e5e8ef;border-radius:20px;overflow:hidden}
+.progress>div{height:100%;background:linear-gradient(90deg,#6c63ff,#a35cff)}
+.question-meta{display:flex;justify-content:space-between;color:var(--muted);font-weight:800;margin:12px 0}
+.question{font-size:38px;font-weight:950;text-align:center;margin:40px auto 28px;max-width:800px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.answer{background:#f3f6fb;color:var(--text);padding:19px;border-radius:17px;text-align:left;font-weight:900;font-size:18px;border:2px solid transparent}
+.answer:hover{background:#e8edff}
+.answer.correct{background:#e5fbf3;border-color:#10b981;color:#08795a}
+.answer.wrong{background:#fff0f3;border-color:#ef476f;color:#a81e42}
+.result{text-align:center;padding:30px}
+.trophy{font-size:80px}.score{font-size:50px;font-weight:950}
+.settings,.modal{display:none;position:fixed;inset:0;background:#061126aa;z-index:20;align-items:center;justify-content:center;padding:20px}
+.settings.show,.modal.show{display:flex}
+.settings-box,.modal-box{background:white;color:var(--text);padding:27px;border-radius:25px;width:min(520px,100%)}
+.stat-list{display:grid;gap:10px;margin-top:18px}
+.stat{display:flex;justify-content:space-between;background:#f5f7fb;padding:14px;border-radius:13px}
+.actions{display:flex;gap:10px;justify-content:center;margin-top:18px}
+.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%);
+background:#111a2d;color:white;padding:13px 18px;border-radius:14px;
+opacity:0;transition:.2s;z-index:50}.toast.show{opacity:1}
+.map-layout{display:grid;grid-template-columns:1.15fr .85fr;gap:18px}
+.globe{min-height:560px;display:flex;align-items:center;justify-content:center;background:#eaf7ff;overflow:hidden}
+.globe svg{width:100%;height:550px}
+.search{width:100%;padding:13px;border:1px solid #ddd;border-radius:13px}
+.country-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:430px;overflow:auto;margin-top:12px}
+.country-btn{padding:11px;background:#f3f6fb;border-radius:12px;text-align:left;font-weight:800;color:var(--text)}
+.country-detail{margin-top:15px;background:#f7f9fd;padding:17px;border-radius:18px;color:var(--text)}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.detail{background:white;padding:11px;border-radius:11px}
+.detail b{display:block;margin-top:3px}
+.dino{font-size:100px;display:inline-block}
+.dino.idle{animation:bob 1.6s infinite}
+.dino.happy{animation:happy .6s 2}
+.dino.angry{animation:angry .15s 5}
+.dino-box{text-align:center;margin:10px}
+.speech{display:inline-block;background:white;color:#17213b;padding:10px 15px;border:3px solid #17213b;border-radius:18px;font-weight:900}
+.lab{background:linear-gradient(135deg,#11152b,#273a85);border-radius:25px;color:white;text-align:center;padding:30px;margin-bottom:15px}
+.atom{font-size:75px;animation:pulse 1.3s infinite}
+@keyframes bob{50%{transform:translateY(-10px) rotate(3deg)}}
+@keyframes happy{40%{transform:scale(1.2) rotate(-8deg)}70%{transform:scale(1.1) rotate(8deg)}}
+@keyframes angry{50%{transform:translateX(-10px) rotate(-5deg)}}
+@keyframes pulse{50%{transform:scale(1.15);filter:drop-shadow(0 0 20px #91a7ff)}}
+@media(max-width:900px){
+.home-grid,.map-layout{grid-template-columns:1fr}
+.grade-grid,.topic-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:600px){
+.app{padding:12px}.grade-grid,.topic-grid,.answers{grid-template-columns:1fr}
+.country-grid{grid-template-columns:1fr}.question{font-size:28px}
+}
 </style>
 </head>
+
 <body>
 <div class="app">
-<header><div class="logo"><span>🌍</span> Country Explorer</div><div class="pill" id="streak">🔥 Streak: 1</div><button class="iconbtn" onclick="showPage('stats')">⚙️</button></header>
 
-<section id="home" class="page active">
-<div class="hero"><h1>Explore the world.<br>Play. Learn. Win.</h1><p class="sub">Discover countries, test your geography knowledge and build your streak.</p><button class="bigbtn" onclick="showPage('map')">🗺️ Explore Map</button><button class="bigbtn secondary" onclick="showPage('game')">🎮 Play Game</button></div>
-<div class="grid"><div class="card"><h3>🔥 Daily Streak</h3><div class="stat" id="homeStreak">1</div><p class="muted">Keep coming back every day.</p></div><div class="card"><h3>🏆 Games Won</h3><div class="stat" id="homeWins">0</div></div><div class="card"><h3>⭐ XP</h3><div class="stat" id="homeXP">0</div></div></div>
-</section>
-
-<section id="map" class="page">
-<div class="hero"><h2>🗺️ My Map</h2><div class="search"><input id="search" placeholder="Search a country..." oninput="searchCountry()"><button class="bigbtn" onclick="randomCountry()">🎲 Random</button></div>
-<div class="globe" id="globe"></div><div id="countryInfo" class="card"></div></div>
-</section>
-
-<section id="game" class="page">
-<div class="hero gamebox" id="gameMenu"><h2>🎮 My Game</h2><p class="sub">Choose your difficulty. Every level gets harder.</p><div class="modegrid">
-<button class="mode" onclick="startGame('Easy')"><strong>🟢 Easy</strong><small>5 questions · common capitals & flags</small></button>
-<button class="mode" onclick="startGame('Medium')"><strong>🔵 Medium</strong><small>7 questions · capitals, flags & currencies</small></button>
-<button class="mode" onclick="startGame('Hard')"><strong>🟠 Hard</strong><small>10 questions · mixed knowledge</small></button>
-<button class="mode" onclick="startGame('Impossible')"><strong>🔴 Impossible</strong><small>12 questions · tricky geography</small></button>
-</div></div>
-<div class="hero gamebox" id="gamePlay" style="display:none">
-<div class="topgame"><b id="difficulty"></b><button class="iconbtn" onclick="confirmLeave()">✕</button></div><div class="progress"><i id="bar"></i></div><div class="muted" id="qnum"></div><div class="question" id="question"></div><div class="answers" id="answers"></div><div class="feedback" id="feedback"></div></div>
-<div class="hero gamebox" id="results" style="display:none;text-align:center"></div>
-</section>
-
-<section id="fact" class="page"><div class="hero"><h2>💡 Fun Fact of the Day</h2><div class="card"><div class="factday" id="dailyFact"></div><p class="muted" id="factCountry"></p></div><button class="bigbtn" onclick="newFact()">🔄 Another Fact</button></div></section>
-
-<section id="stats" class="page"><div class="hero"><h2>📊 Your Stats</h2><div class="grid"><div class="card"><h3>🏆 Games Won</h3><div class="stat" id="wins">0</div></div><div class="card"><h3>⚡ Fastest Win</h3><div class="stat" id="fastest">—</div></div><div class="card"><h3>⭐ XP</h3><div class="stat" id="xp">0</div></div><div class="card"><h3>🎯 Accuracy</h3><div class="stat" id="accuracy">0%</div></div><div class="card"><h3>🔥 Streak</h3><div class="stat" id="statsStreak">1</div></div><div class="card"><h3>🎮 Games Played</h3><div class="stat" id="played">0</div></div></div><h3>🏅 Achievements</h3><div id="badges"></div></div></section>
+<div class="topbar">
+<div class="brand">🌍 Country Explorer EDU</div>
+<div class="top-actions">
+<div class="pill" id="streak">🔥 Streak: 0</div>
+<button class="icon-btn" onclick="openSettings()">⚙️</button>
+</div>
 </div>
 
-<div class="nav"><button onclick="showPage('home')" id="n-home">🏠<br>Home</button><button onclick="showPage('map')" id="n-map">🗺️<br>My Map</button><button onclick="showPage('game')" id="n-game">🎮<br>My Game</button><button onclick="showPage('fact')" id="n-fact">💡<br>Fun Fact</button><button onclick="showPage('stats')" id="n-stats">📊<br>Stats</button></div>
+<!-- HOME -->
+<section id="home" class="screen active">
+<div class="hero">
+<h1><span class="gradient">Learn. Play. Explore.</span></h1>
+<p>Explore the world and learn Math, English and Science through fun interactive challenges.</p>
+</div>
 
-<div class="modal" id="leaveModal"><div class="modalbox"><h2>Leave game session?</h2><p class="muted">Your current game progress will be lost.</p><button class="bigbtn" onclick="leaveGame()">Leave Game</button><button class="bigbtn secondary" onclick="closeModal()">Keep Playing</button></div></div>
+<div class="home-grid">
+
+<div class="card">
+<div>
+<div class="emoji">➗</div>
+<h2>Math</h2>
+<p>Choose your grade and practise Math at your level.</p>
+</div>
+<button class="primary" onclick="openMath()">Start Math →</button>
+</div>
+
+<div class="card">
+<div>
+<div class="emoji">🌍</div>
+<h2>Geography</h2>
+<p>Explore countries, use the globe, learn facts and play geography games.</p>
+</div>
+<button class="primary" onclick="openGeo()">Explore Geography →</button>
+</div>
+
+<div class="card">
+<div>
+<div class="emoji">🔬</div>
+<h2>Science</h2>
+<p>Grades 1–6 have a fun dinosaur. Grades 7–12 enter advanced Scientist Mode.</p>
+</div>
+<button class="primary" onclick="openScience()">Start Science →</button>
+</div>
+
+<div class="card">
+<div>
+<div class="emoji">🇬🇧</div>
+<h2>English</h2>
+<p>Practise grammar, vocabulary, spelling and reading.</p>
+</div>
+<button class="primary" onclick="openEnglish()">Start English →</button>
+</div>
+
+</div>
+</section>
+
+<!-- MATH -->
+<section id="math" class="screen">
+<div class="toolbar">
+<button class="back" onclick="home()">← Home</button>
+<span class="badge">➗ Math Academy</span>
+</div>
+<div class="panel learning" id="mathBox"></div>
+</section>
+
+<!-- ENGLISH -->
+<section id="english" class="screen">
+<div class="toolbar">
+<button class="back" onclick="home()">← Home</button>
+<span class="badge">🇬🇧 English Academy</span>
+</div>
+<div class="panel learning" id="englishBox"></div>
+</section>
+
+<!-- SCIENCE -->
+<section id="science" class="screen">
+<div class="toolbar">
+<button class="back" onclick="home()">← Home</button>
+<span class="badge">🔬 Science Academy</span>
+</div>
+<div class="panel learning" id="scienceBox"></div>
+</section>
+
+<!-- GEOGRAPHY -->
+<section id="geo" class="screen">
+<div class="toolbar">
+<button class="back" onclick="home()">← Home</button>
+<span class="badge">🌍 Geography Explorer</span>
+</div>
+
+<div class="hero">
+<h1 style="font-size:48px">Explore the World 🌎</h1>
+<p>Choose My Map, My Game or Fun Fact of the Day.</p>
+</div>
+
+<div class="home-grid">
+<div class="card">
+<div><div class="emoji">🗺️</div><h2>My Map</h2>
+<p>Explore countries, flags, capitals, currencies, populations and more.</p></div>
+<button class="primary" onclick="openMap()">Open My Map →</button>
+</div>
+
+<div class="card">
+<div><div class="emoji">🎮</div><h2>My Game</h2>
+<p>Play Easy, Medium, Hard or Impossible geography.</p></div>
+<button class="primary" onclick="openGame()">Play My Game →</button>
+</div>
+
+<div class="card">
+<div><div class="emoji">💡</div><h2>Fun Fact of the Day</h2>
+<p>Discover a new geography fact.</p></div>
+<button class="primary" onclick="fact()">Fun Fact →</button>
+</div>
+</div>
+</section>
+
+<!-- MAP -->
+<section id="map" class="screen">
+<div class="toolbar">
+<button class="back" onclick="openGeo()">← Geography</button>
+<button class="secondary" onclick="randomCountry()">🎲 Random Country</button>
+</div>
+
+<div class="map-layout">
+<div class="panel globe">
+<svg id="globe" viewBox="0 0 700 550"></svg>
+</div>
+
+<div class="panel">
+<input id="search" class="search" placeholder="🔎 Search any country..." oninput="filterCountries()">
+<div id="countries" class="country-grid"></div>
+<div id="countryDetail" class="country-detail">
+<h2>Select a country 🌎</h2>
+</div>
+</div>
+</div>
+</section>
+
+<!-- GAME -->
+<section id="game" class="screen">
+<div class="toolbar">
+<button class="back" onclick="attemptLeave()">← Home</button>
+<button class="danger" onclick="confirmLeave()">✕</button>
+</div>
+
+<div class="panel">
+<div id="difficulty">
+<h2>🎮 Choose Difficulty</h2>
+
+<div class="grade-grid">
+<button class="choice" onclick="startGeoGame('Easy')">🟢 Easy<small>5 questions</small></button>
+<button class="choice" onclick="startGeoGame('Medium')">🟡 Medium<small>10 questions</small></button>
+<button class="choice" onclick="startGeoGame('Hard')">🔴 Hard<small>15 questions</small></button>
+<button class="choice" onclick="startGeoGame('Impossible')">⚡ Impossible<small>20 questions</small></button>
+</div>
+</div>
+
+<div id="geoQuiz"></div>
+</div>
+</section>
+
+<!-- FACT -->
+<section id="factScreen" class="screen">
+<div class="toolbar"><button class="back" onclick="openGeo()">← Geography</button></div>
+<div class="panel hero">
+<div style="font-size:90px">💡</div>
+<h1 id="factTitle">Fun Fact</h1>
+<p id="factText"></p>
+<button class="primary" onclick="showFact()">Another Fact</button>
+</div>
+</section>
+
+</div>
+
+<!-- SETTINGS -->
+<div id="settings" class="settings">
+<div class="settings-box">
+<h2>⚙️ Your Stats</h2>
+<div class="stat-list">
+<div class="stat"><span>🏆 Games Won</span><b id="wins">0</b></div>
+<div class="stat"><span>🎮 Games Played</span><b id="played">0</b></div>
+<div class="stat"><span>⭐ Best Score</span><b id="best">0%</b></div>
+<div class="stat"><span>⚡ Fastest Win</span><b id="fastest">—</b></div>
+<div class="stat"><span>⏱️ Time Played</span><b id="time">0 min</b></div>
+<div class="stat"><span>🔥 Streak</span><b id="settingsStreak">0</b></div>
+</div>
+<br>
+<button class="danger" onclick="resetStats()">Reset Stats</button>
+<button class="secondary" onclick="closeSettings()">Close</button>
+</div>
+</div>
+
+<!-- LEAVE GAME -->
+<div id="leaveModal" class="modal">
+<div class="modal-box">
+<h2>Leave game session?</h2>
+<p>🚫 No cheating! Your current game progress will be lost.</p>
+<div class="actions">
+<button class="secondary" onclick="closeLeave()">Keep Playing</button>
+<button class="danger" onclick="leaveGame()">Leave Game Session</button>
+</div>
+</div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
 
 <script>
-const countries=[
-["Afghanistan","🇦🇫","Kabul","Afghani","Asia",42.2,652230,33.94,67.71],
-["Albania","🇦🇱","Tirana","Lek","Europe",2.8,28748,41.15,20.17],
-["Algeria","🇩🇿","Algiers","Algerian dinar","Africa",46,2381741,28.03,1.66],
-["Argentina","🇦🇷","Buenos Aires","Argentine peso","South America",45.8,2780400,-38.42,-63.62],
-["Australia","🇦🇺","Canberra","Australian dollar","Oceania",27.2,7692024,-25.27,133.78],
-["Austria","🇦🇹","Vienna","Euro","Europe",9.2,83871,47.52,14.55],
-["Belgium","🇧🇪","Brussels","Euro","Europe",11.8,30528,50.85,4.35],
-["Brazil","🇧🇷","Brasília","Brazilian real","South America",212.6,8515767,-10.81,-52.97],
-["Canada","🇨🇦","Ottawa","Canadian dollar","North America",40.8,9984670,56.13,-106.35],
-["Chile","🇨🇱","Santiago","Chilean peso","South America",19.8,756102,-33.45,-70.67],
-["China","🇨🇳","Beijing","Renminbi","Asia",1410,9596961,35.86,104.20],
-["Colombia","🇨🇴","Bogotá","Colombian peso","South America",52.9,1141748,4.57,-74.30],
-["Croatia","🇭🇷","Zagreb","Euro","Europe",3.9,56594,45.10,15.20],
-["Czechia","🇨🇿","Prague","Czech koruna","Europe",10.9,78871,49.82,15.47],
-["Denmark","🇩🇰","Copenhagen","Danish krone","Europe",6,43094,56.26,9.50],
-["Egypt","🇪🇬","Cairo","Egyptian pound","Africa",116,1002450,26.82,30.80],
-["Finland","🇫🇮","Helsinki","Euro","Europe",5.6,338455,64.00,26.00],
-["France","🇫🇷","Paris","Euro","Europe",68.6,551695,46.23,2.21],
-["Germany","🇩🇪","Berlin","Euro","Europe",84.5,357022,51.17,10.45],
-["Greece","🇬🇷","Athens","Euro","Europe",10.3,131957,39.07,21.82],
-["Hungary","🇭🇺","Budapest","Forint","Europe",9.6,93028,47.16,19.50],
-["Iceland","🇮🇸","Reykjavík","Icelandic króna","Europe",0.4,103000,64.96,-19.02],
-["India","🇮🇳","New Delhi","Indian rupee","Asia",1460,3287263,20.59,78.96],
-["Indonesia","🇮🇩","Jakarta","Rupiah","Asia",285,1904569,-0.79,113.92],
-["Ireland","🇮🇪","Dublin","Euro","Europe",5.4,70273,53.14,-7.69],
-["Israel","🇮🇱","Jerusalem","New shekel","Asia",10.1,22072,31.05,34.85],
-["Italy","🇮🇹","Rome","Euro","Europe",58.7,301340,41.87,12.57],
-["Japan","🇯🇵","Tokyo","Yen","Asia",123.8,377975,36.20,138.25],
-["Kenya","🇰🇪","Nairobi","Kenyan shilling","Africa",57.5,580367,-0.02,37.91],
-["Luxembourg","🇱🇺","Luxembourg City","Euro","Europe",0.68,2586,49.81,6.13],
-["Malaysia","🇲🇾","Kuala Lumpur","Ringgit","Asia",35.9,330803,-4.21,101.98],
-["Mexico","🇲🇽","Mexico City","Mexican peso","North America",132,1964375,23.63,-102.55],
-["Morocco","🇲🇦","Rabat","Moroccan dirham","Africa",38,446550,31.79,-7.09],
-["Netherlands","🇳🇱","Amsterdam","Euro","Europe",18.1,41543,52.13,5.29],
-["New Zealand","🇳🇿","Wellington","New Zealand dollar","Oceania",5.4,268021,-40.90,174.89],
-["Nigeria","🇳🇬","Abuja","Naira","Africa",239,923768,9.08,8.68],
-["Norway","🇳🇴","Oslo","Norwegian krone","Europe",5.6,385207,60.47,8.47],
-["Pakistan","🇵🇰","Islamabad","Pakistani rupee","Asia",257,881913,30.38,69.35],
-["Peru","🇵🇪","Lima","Sol","South America",34.6,1285216,-9.19,-75.02],
-["Poland","🇵🇱","Warsaw","Złoty","Europe",36.5,312696,51.92,19.15],
-["Portugal","🇵🇹","Lisbon","Euro","Europe",10.4,92212,39.40,-8.22],
-["Romania","🇷🇴","Bucharest","Romanian leu","Europe",19,238397,45.94,24.97],
-["Saudi Arabia","🇸🇦","Riyadh","Saudi riyal","Asia",34.6,2149690,23.89,45.08],
-["Serbia","🇷🇸","Belgrade","Serbian dinar","Europe",6.6,88361,44.02,21.01],
-["Singapore","🇸🇬","Singapore","Singapore dollar","Asia",6.1,734,1.35,103.82],
-["Slovakia","🇸🇰","Bratislava","Euro","Europe",5.4,49035,48.67,19.70],
-["Slovenia","🇸🇮","Ljubljana","Euro","Europe",2.1,20273,46.15,14.99],
-["South Africa","🇿🇦","Pretoria","Rand","Africa",63,1221037,-30.56,22.94],
-["South Korea","🇰🇷","Seoul","Won","Asia",51.7,100210,35.91,127.77],
-["Spain","🇪🇸","Madrid","Euro","Europe",49,505370,40.46,-3.75],
-["Sweden","🇸🇪","Stockholm","Swedish krona","Europe",10.7,450295,62.20,15.64],
-["Switzerland","🇨🇭","Bern","Swiss franc","Europe",9.1,41284,46.82,8.23],
-["Tunisia","🇹🇳","Tunis","Tunisian dinar","Africa",12.3,163610,33.89,9.54],
-["Türkiye","🇹🇷","Ankara","Turkish lira","Asia",87.7,783562,38.96,35.24],
-["Ukraine","🇺🇦","Kyiv","Hryvnia","Europe",37.9,603500,48.38,31.17],
-["United Arab Emirates","🇦🇪","Abu Dhabi","UAE dirham","Asia",11.3,83600,23.42,53.85],
-["United Kingdom","🇬🇧","London","Pound sterling","Europe",69.5,243610,55.38,-3.44],
-["United States","🇺🇸","Washington, D.C.","US dollar","North America",347,9833517,39.83,-98.58],
-["Vietnam","🇻🇳","Hanoi","Dong","Asia",101.6,331212,14.06,108.28]
-];
+/* =========================
+   BASIC FUNCTIONS
+========================= */
+
+const $=id=>document.getElementById(id);
+
+function show(id){
+document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));
+$(id).classList.add('active');
+scrollTo(0,0);
+}
+
+function home(){show('home')}
+
+function toast(t){
+let x=$('toast');
+x.textContent=t;
+x.classList.add('show');
+setTimeout(()=>x.classList.remove('show'),1800);
+}
+
+function escapeHTML(x){
+return String(x).replace(/[&<>"']/g,m=>({
+'&':'&amp;','<':'&lt;','>':'&gt;',
+'"':'&quot;',"'":'&#39;'
+}[m]));
+}
+
+/* =========================
+   STATS
+========================= */
+
+let stats=JSON.parse(localStorage.getItem('CE_STATS')||
+'{"wins":0,"played":0,"best":0,"fastest":0,"time":0,"streak":0,"last":""}');
+
+function saveStats(){
+localStorage.setItem('CE_STATS',JSON.stringify(stats));
+updateStats();
+}
+
+function updateStats(){
+$('wins').textContent=stats.wins;
+$('played').textContent=stats.played;
+$('best').textContent=stats.best+'%';
+$('fastest').textContent=stats.fastest?stats.fastest+' sec':'—';
+$('time').textContent=Math.round(stats.time/60)+' min';
+$('settingsStreak').textContent=stats.streak;
+$('streak').textContent='🔥 Streak: '+stats.streak;
+}
+
+function openSettings(){
+updateStats();
+$('settings').classList.add('show');
+}
+
+function closeSettings(){
+$('settings').classList.remove('show');
+}
+
+function resetStats(){
+stats={wins:0,played:0,best:0,fastest:0,time:0,streak:0,last:''};
+saveStats();
+toast('Stats reset!');
+}
+
+/* =========================
+   MATH
+========================= */
+
+const mathTopics={
+1:[
+['Addition','Add numbers up to 10'],
+['Subtraction','Subtract numbers up to 10'],
+['Number Sense','Count and compare numbers']
+],
+2:[
+['Addition & Subtraction','Easy two-digit addition'],
+['Multiplication','2s, 5s and 10s'],
+['Place Value','Tens and ones']
+],
+3:[
+['Multiplication','Times tables up to 10'],
+['Division','Simple division'],
+['Fractions','Halves, thirds and quarters']
+],
+4:[
+['Multiplication','Easy multiplication'],
+['Division','Short division'],
+['Fractions','Simple fractions'],
+['Decimals','Tenths and hundredths']
+],
+5:[
+['Fractions','Add simple fractions'],
+['Decimals','Add and subtract decimals'],
+['Geometry','Area, perimeter and angles'],
+['Expressions','Order of operations']
+],
+6:[
+['Ratios','Ratios and proportions'],
+['Integers','Positive and negative numbers'],
+['Expressions','Expressions and equations'],
+['Geometry','Area and volume']
+],
+7:[
+['Proportions','Rates and proportions'],
+['Equations','One and two-step equations'],
+['Percentages','Percent increase and decrease'],
+['Geometry','Circles and angles']
+],
+8:[
+['Linear Equations','Solve linear equations'],
+['Functions','Graphs and functions'],
+['Systems','Systems of equations'],
+['Exponents','Powers and scientific notation']
+],
+9:[
+['Algebra','Algebraic manipulation'],
+['Quadratics','Quadratic equations'],
+['Functions','Linear and quadratic functions'],
+['Geometry','Coordinate geometry']
+]
+};
+
+let mathGrade,mathTopic,mathQs=[],mathI=0,mathScore=0;
+
+function getMastery(type,g){
+let x=JSON.parse(localStorage.getItem('CE_'+type)||'{}');
+return Math.round(x[g]||0);
+}
+
+function setMastery(type,g,p){
+let x=JSON.parse(localStorage.getItem('CE_'+type)||'{}');
+x[g]=Math.round((x[g]||0)*.65+p*.35);
+localStorage.setItem('CE_'+type,JSON.stringify(x));
+}
+
+function openMath(){
+show('math');
+renderMathGrades();
+}
+
+function renderMathGrades(){
+$('mathBox').innerHTML=`
+<div class="hero">
+<div style="font-size:65px">➗</div>
+<h1 style="font-size:42px">Choose Your Grade</h1>
+<p>Elementary Math is kept simple and fun.</p>
+</div>
+<div class="grade-grid">
+${Object.keys(mathTopics).map(g=>{
+let p=getMastery('MATH',g);
+return `<button class="choice" onclick="chooseMath(${g})">
+<strong>Grade ${g}</strong>
+<small>${mathTopics[g].map(x=>x[0]).join(' • ')}</small>
+<div class="mastery">
+<div class="mastery-head"><span>Mastery</span><span>${p}%</span></div>
+<div class="mastery-track"><div class="mastery-fill" style="width:${p}%"></div></div>
+</div>
+</button>`
+}).join('')}
+</div>`;
+}
+
+function chooseMath(g){
+mathGrade=g;
+$('mathBox').innerHTML=`
+<div class="hero">
+<div style="font-size:60px">🎓</div>
+<h1 style="font-size:40px">Grade ${g}</h1>
+<p>Choose a Math topic.</p>
+</div>
+<div class="topic-grid">
+${mathTopics[g].map(t=>
+`<button class="choice" onclick="startMath('${t[0]}')">
+${t[0]}<small>${t[1]}</small>
+</button>`).join('')}
+</div>
+<br><button class="secondary" onclick="renderMathGrades()">← Change Grade</button>`;
+}
+
+function rand(a,b){
+return Math.floor(Math.random()*(b-a+1))+a;
+}
+
+function startMath(t){
+mathTopic=t;mathI=0;mathScore=0;mathQs=[];
+
+for(let i=0;i<8;i++){
+let a,b,ans,q;
+
+if(t==='Addition'){
+let max=mathGrade==1?10:mathGrade==2?50:200;
+a=rand(0,max);b=rand(0,max-a);
+ans=a+b;q=`${a} + ${b} = ?`;
+}
+
+else if(t==='Subtraction'){
+let max=mathGrade==1?10:mathGrade==2?50:200;
+a=rand(0,max);b=rand(0,a);
+ans=a-b;q=`${a} − ${b} = ?`;
+}
+
+else if(t==='Addition & Subtraction'){
+a=rand(10,99);b=rand(1,Math.min(30,a));
+if(Math.random()<.5){ans=a+b;q=`${a} + ${b} = ?`}
+else{ans=a-b;q=`${a} − ${b} = ?`}
+}
+
+else if(t==='Multiplication'){
+let ma=mathGrade<=2?5:mathGrade==3?10:20;
+a=rand(1,ma);b=rand(1,12);
+ans=a*b;q=`${a} × ${b} = ?`;
+}
+
+else if(t==='Division'){
+b=rand(2,10);ans=rand(1,15);a=b*ans;
+q=`${a} ÷ ${b} = ?`;
+}
+
+else if(t==='Place Value'){
+a=rand(10,999);
+let p=mathGrade==2?[1,10][rand(0,1)]:[1,10,100][rand(0,2)];
+ans=Math.floor(a/p)%10;
+q=`What digit is in the ${p==100?'hundreds':p==10?'tens':'ones'} place of ${a}?`;
+}
+
+else if(t==='Fractions'){
+let d=mathGrade<=3?[2,4][rand(0,1)]:[2,4,5,10][rand(0,3)];
+let x=rand(1,d-1),y=rand(1,d-x);
+ans=`${x+y}/${d}`;
+q=`${x}/${d} + ${y}/${d} = ?`;
+}
+
+else if(t==='Decimals'){
+a=rand(1,99)/10;b=rand(1,99)/10;
+ans=(a+b).toFixed(1);
+q=`${a} + ${b} = ?`;
+}
+
+else if(t==='Percentages'){
+let base=rand(20,200),p=[10,20,25,50][rand(0,3)];
+ans=base*p/100;q=`What is ${p}% of ${base}?`;
+}
+
+else if(t==='Ratios'){
+a=rand(2,10);b=rand(2,10);
+ans=a*b;q=`If 1 part is ${a}, what is ${b} parts?`;
+}
+
+else if(t==='Integers'){
+a=rand(-20,20);b=rand(-20,20);
+ans=a+b;q=`${a} + (${b}) = ?`;
+}
+
+else if(t==='Linear Equations'){
+let x=rand(1,15),a=rand(2,8),b=rand(1,20);
+let total=a*x+b;
+ans=x;q=`Solve: ${a}x + ${b} = ${total}`;
+}
+
+else if(t==='Exponents'){
+a=rand(2,5);b=rand(2,4);
+ans=a**b;q=`${a}^${b} = ?`;
+}
+
+else{
+a=rand(2,20);b=rand(2,20);
+ans=a+b;q=`${a} + ${b} = ?`;
+}
+
+let options=[String(ans)];
+
+while(options.length<4){
+let n=Number(ans);
+let wrong=Number.isFinite(n)?n+rand(-5,5):rand(1,20);
+if(wrong>=0&&!options.includes(String(wrong)))
+options.push(String(wrong));
+}
+
+options.sort(()=>Math.random()-.5);
+mathQs.push({q,options,correct:String(ans)});
+}
+
+renderMathQ();
+}
+
+function renderMathQ(){
+let q=mathQs[mathI];
+
+$('mathBox').innerHTML=`
+<div class="quiz">
+<div class="toolbar">
+<span class="badge">Grade ${mathGrade} • ${mathTopic}</span>
+<button class="danger" onclick="home()">✕</button>
+</div>
+<div class="progress"><div style="width:${mathI/mathQs.length*100}%"></div></div>
+<div class="question-meta">
+<span>Question ${mathI+1} of ${mathQs.length}</span>
+<span>Score ${mathScore}</span>
+</div>
+<div class="question">${escapeHTML(q.q)}</div>
+<div class="answers">
+${q.options.map((a,i)=>
+`<button class="answer" onclick="answerMath(${i})">${escapeHTML(a)}</button>`).join('')}
+</div>
+</div>`;
+}
+
+function answerMath(i){
+let q=mathQs[mathI];
+let buttons=document.querySelectorAll('#mathBox .answer');
+buttons.forEach((b,j)=>{
+b.disabled=true;
+if(q.options[j]===q.correct)b.classList.add('correct');
+if(j===i&&q.options[j]!==q.correct)b.classList.add('wrong');
+});
+if(q.options[i]===q.correct){mathScore++;toast('Correct! 🧠')}
+else toast('Keep trying! 💪');
+
+setTimeout(()=>{
+mathI++;
+if(mathI>=mathQs.length){
+let p=Math.round(mathScore/mathQs.length*100);
+setMastery('MATH',mathGrade,p);
+$('mathBox').innerHTML=`
+<div class="result">
+<div class="trophy">${p==100?'🏆':'🎉'}</div>
+<h2>Math Complete!</h2>
+<div class="score">${p}%</div>
+<p>${mathScore}/${mathQs.length} correct</p>
+<button class="primary" onclick="startMath('${mathTopic}')">Play Again</button>
+<button class="secondary" onclick="chooseMath(${mathGrade})">Change Topic</button>
+</div>`;
+}else renderMathQ();
+},500);
+}
+
+/* =========================
+   ENGLISH
+========================= */
+
+const englishTopics={
+1:['Vocabulary','Spelling','Reading'],
+2:['Vocabulary','Grammar','Reading'],
+3:['Grammar','Vocabulary','Spelling'],
+4:['Grammar','Vocabulary','Reading'],
+5:['Grammar','Vocabulary','Reading'],
+6:['Grammar','Vocabulary','Reading'],
+7:['Grammar','Vocabulary','Reading'],
+8:['Grammar','Vocabulary','Reading'],
+9:['Grammar','Vocabulary','Reading']
+};
+
+let engGrade,engTopic,engQs=[],engI=0,engScore=0;
+
+const englishBank={
+Vocabulary:[
+['Which word means the same as happy?',['sad','joyful','angry','tired'],'joyful'],
+['Which word means the opposite of big?',['large','huge','small','wide'],'small'],
+['Which word means the same as quick?',['slow','fast','late','quiet'],'fast'],
+['Which word means the same as begin?',['finish','start','stop','close'],'start']
+],
+Grammar:[
+['She ___ to school every day.',['go','goes','going','gone'],'goes'],
+['They ___ playing football yesterday.',['was','is','were','be'],'were'],
+['Choose the noun: The dog chased the ball.',['chased','dog','quickly','the'],'dog'],
+['Choose the verb: The bird sings beautifully.',['bird','beautifully','the','sings'],'sings'],
+['Choose the adjective: The red car is fast.',['car','red','is','fast'],'red']
+],
+Spelling:[
+['Which spelling is correct?',['because','becaus','becouse','beacause'],'because'],
+['Which spelling is correct?',['beautiful','beautifull','beutiful','beautifol'],'beautiful'],
+['Which spelling is correct?',['tomorow','tomorrow','tommorow','tomorroe'],'tomorrow'],
+['Which spelling is correct?',['friend','freind','frend','friand'],'friend']
+],
+Reading:[
+['Mia packed an umbrella because dark clouds filled the sky. Why?',['She expected rain.','She went swimming.','She was sleeping.','She lost her coat.'],'She expected rain.'],
+['Leo practised piano every day and improved. What helped?',['Practising regularly','Stopping practice','Buying a chair','Changing schools'],'Practising regularly'],
+['Sam read at a table near the window in the library. Where was Sam?',['Library','Park','Bus','Home'],'Library']
+]
+};
+
+function openEnglish(){
+show('english');
+renderEnglishGrades();
+}
+
+function renderEnglishGrades(){
+$('englishBox').innerHTML=`
+<div class="hero">
+<div style="font-size:60px">🇬🇧</div>
+<h1 style="font-size:42px">Choose Your Grade</h1>
+</div>
+<div class="grade-grid">
+${Object.keys(englishTopics).map(g=>{
+let p=getMastery('ENG',g);
+return `<button class="choice" onclick="chooseEnglish(${g})">
+<strong>Grade ${g}</strong>
+<small>${englishTopics[g].join(' • ')}</small>
+<div class="mastery">
+<div class="mastery-head"><span>Mastery</span><span>${p}%</span></div>
+<div class="mastery-track"><div class="mastery-fill" style="width:${p}%"></div></div>
+</div>
+</button>`
+}).join('')}
+</div>`;
+}
+
+function chooseEnglish(g){
+engGrade=g;
+$('englishBox').innerHTML=`
+<div class="hero">
+<div style="font-size:60px">📚</div>
+<h1 style="font-size:40px">English • Grade ${g}</h1>
+</div>
+<div class="topic-grid">
+${englishTopics[g].map(t=>
+`<button class="choice" onclick="startEnglish('${t}')">${t}<small>Practice ${t.toLowerCase()}</small></button>`).join('')}
+</div>
+<br>
+<button class="secondary" onclick="renderEnglishGrades()">← Change Grade</button>`;
+}
+
+function startEnglish(t){
+engTopic=t;engI=0;engScore=0;engQs=[];
+
+let pool=englishBank[t]||englishBank.Vocabulary;
+
+for(let i=0;i<8;i++){
+let q=pool[rand(0,pool.length-1)];
+engQs.push({
+q:q[0],
+options:[...q[1]].sort(()=>Math.random()-.5),
+correct:q[2]
+});
+}
+renderEnglishQ();
+}
+
+function renderEnglishQ(){
+let q=engQs[engI];
+
+$('englishBox').innerHTML=`
+<div class="quiz">
+<div class="toolbar">
+<span class="badge">Grade ${engGrade} • ${engTopic}</span>
+<button class="danger" onclick="home()">✕</button>
+</div>
+<div class="progress"><div style="width:${engI/engQs.length*100}%"></div></div>
+<div class="question-meta">
+<span>Question ${engI+1} of ${engQs.length}</span>
+<span>Score ${engScore}</span>
+</div>
+<div class="question">${escapeHTML(q.q)}</div>
+<div class="answers">
+${q.options.map((a,i)=>
+`<button class="answer" onclick="answerEnglish(${i})">${escapeHTML(a)}</button>`).join('')}
+</div>
+</div>`;
+}
+
+function answerEnglish(i){
+let q=engQs[engI];
+let buttons=document.querySelectorAll('#englishBox .answer');
+
+buttons.forEach((b,j)=>{
+b.disabled=true;
+if(q.options[j]===q.correct)b.classList.add('correct');
+if(j===i&&q.options[j]!==q.correct)b.classList.add('wrong');
+});
+
+if(q.options[i]===q.correct){engScore++;toast('Correct! 🇬🇧')}
+else toast('Keep going!');
+
+setTimeout(()=>{
+engI++;
+
+if(engI>=engQs.length){
+let p=Math.round(engScore/engQs.length*100);
+setMastery('ENG',engGrade,p);
+
+$('englishBox').innerHTML=`
+<div class="result">
+<div class="trophy">${p==100?'🏆':'🎉'}</div>
+<h2>English Complete!</h2>
+<div class="score">${p}%</div>
+<p>${engScore}/${engQs.length} correct</p>
+<button class="primary" onclick="startEnglish('${engTopic}')">Play Again</button>
+<button class="secondary" onclick="chooseEnglish(${engGrade})">Change Topic</button>
+</div>`;
+}else renderEnglishQ();
+},500);
+}
+
+/* =========================
+   SCIENCE
+========================= */
+
+const scienceTopics={
+1:['Living Things','Materials','Earth & Space','Animals'],
+2:['Plants & Animals','Materials','Earth & Space','Forces & Motion'],
+3:['Biology','Chemistry','Physics','Earth & Space'],
+4:['Biology','Chemistry','Physics','Earth & Space'],
+5:['Biology','Chemistry','Physics','Earth & Space'],
+6:['Biology','Chemistry','Physics','Scientific Investigation'],
+7:['Biology','Chemistry','Physics','Earth & Space'],
+8:['Biology','Chemistry','Physics','Scientific Investigation'],
+9:['Biology','Chemistry','Physics','Scientific Skills'],
+10:['IGCSE Biology','IGCSE Chemistry','IGCSE Physics','Practical Science'],
+11:['Advanced Biology','Advanced Chemistry','Advanced Physics','Experimental Design'],
+12:['Biology Challenge','Chemistry Challenge','Physics Challenge','Science Investigation']
+};
+
+const scienceBank={
+'Living Things':[
+['Which feature is shared by living things?',['They grow and reproduce','They are all green','They all fly','They all live on land'],'They grow and reproduce'],
+['Which is a living thing?',['Oak tree','Rock','Cloud','Plastic cup'],'Oak tree'],
+['Why do animals need food?',['Energy and growth','To make sunlight','To become plants','To make rocks'],'Energy and growth']
+],
+'Plants & Animals':[
+['What do plants need for photosynthesis?',['Light','Plastic','Sound','Salt only'],'Light'],
+['A habitat is…',['A place where an organism lives','A planet','A body organ','A type of weather'],'A place where an organism lives'],
+['What does a food chain show?',['Energy passing between organisms','How planets orbit','How rocks melt','How clouds form'],'Energy passing between organisms']
+],
+'Materials':[
+['Which is usually a good electrical conductor?',['Copper','Rubber','Wood','Glass'],'Copper'],
+['A solid changing into a liquid is called…',['Melting','Freezing','Condensing','Evaporating'],'Melting'],
+['What happens when water freezes?',['It becomes a solid','It becomes a gas','It disappears','It becomes metal'],'It becomes a solid']
+],
+'Earth & Space':[
+['What causes day and night?',['Earth rotating','Clouds moving','The Moon disappearing','The Sun orbiting Earth each day'],'Earth rotating'],
+['Which object is a star?',['The Sun','Earth','The Moon','Mars'],'The Sun'],
+['What is Earth’s natural satellite?',['The Moon','Mars','Venus','The Sun'],'The Moon']
+],
+'Animals':[
+['Which animal is a mammal?',['Dolphin','Frog','Eagle','Lizard'],'Dolphin'],
+['Why do animals use camouflage?',['To blend into surroundings','To make food','To create electricity','To change seasons'],'To blend into surroundings']
+],
+'Forces & Motion':[
+['What is a force?',['A push or pull','A color','A planet','A plant'],'A push or pull'],
+['Which force pulls objects toward Earth?',['Gravity','Light','Sound','Magnetism'],'Gravity'],
+['What can friction do?',['Slow moving objects','Create plants','Stop gravity','Make gold'],'Slow moving objects']
+],
+'Biology':[
+['What is the basic unit of life?',['Cell','Organ','Bone','Atom'],'Cell'],
+['Which organ pumps blood?',['Heart','Lung','Kidney','Stomach'],'Heart'],
+['Which process releases energy from food?',['Respiration','Photosynthesis','Evaporation','Filtration'],'Respiration']
+],
+'Chemistry':[
+['Which is an element?',['Oxygen','Water','Carbon dioxide','Salt solution'],'Oxygen'],
+['What is the pH of a neutral solution?',['7','0','14','100'],'7'],
+['Which state has fixed volume but no fixed shape?',['Liquid','Solid','Gas','Plasma'],'Liquid']
+],
+'Physics':[
+['What force pulls objects toward Earth?',['Gravity','Friction','Magnetism','Upthrust'],'Gravity'],
+['What is the unit of force?',['Newton','Joule','Watt','Volt'],'Newton'],
+['Which travels fastest in a vacuum?',['Light','Sound','Water waves','Ocean currents'],'Light']
+],
+'Scientific Investigation':[
+['Why repeat measurements?',['To improve reliability','To remove all variables','To guarantee a result','To change the hypothesis'],'To improve reliability'],
+['What is the independent variable?',['The variable deliberately changed','The result','A constant','An error'],'The variable deliberately changed'],
+['What should a control variable do?',['Stay the same','Always increase','Be ignored','Be measured once'],'Stay the same']
+],
+'IGCSE Biology':[
+['Which enzyme breaks down starch?',['Amylase','Lipase','Protease','Pepsin'],'Amylase'],
+['Where does aerobic respiration mainly occur?',['Mitochondria','Ribosomes','Cell wall','Nucleus'],'Mitochondria'],
+['What is a gene?',['A section of DNA influencing a characteristic','A tissue','A mineral','A type of cell'],'A section of DNA influencing a characteristic']
+],
+'IGCSE Chemistry':[
+['What is the relative formula mass of H₂O?',['18','16','17','20'],'18'],
+['Which particle has a negative charge?',['Electron','Proton','Neutron','Nucleus'],'Electron'],
+['What type of bonding uses shared electron pairs?',['Covalent','Ionic','Metallic','Nuclear'],'Covalent']
+],
+'IGCSE Physics':[
+['Which equation gives speed?',['distance ÷ time','time ÷ distance','distance × time','mass ÷ volume'],'distance ÷ time'],
+['What is current measured in?',['Amperes','Volts','Ohms','Joules'],'Amperes'],
+['Which quantity is conserved in an isolated system?',['Energy','Speed','Temperature','Acceleration'],'Energy']
+],
+'Practical Science':[
+['Why repeat measurements?',['To improve reliability','To change the hypothesis','To remove variables','To guarantee results'],'To improve reliability'],
+['What is a control variable?',['A variable kept the same','The result','The hypothesis','An error'],'A variable kept the same'],
+['Why use a graph?',['To identify patterns','To remove data','To avoid measurements','To prove every hypothesis'],'To identify patterns']
+],
+'Advanced Biology':[
+['Which hormone lowers blood glucose?',['Insulin','Adrenaline','Thyroxine','Oestrogen'],'Insulin'],
+['What is homeostasis?',['Maintaining stable internal conditions','Producing offspring','Breaking rocks','Making antibodies only'],'Maintaining stable internal conditions'],
+['Which molecule carries genetic information?',['DNA','Glucose','Starch','Water'],'DNA']
+],
+'Advanced Chemistry':[
+['What does one mole represent?',['6.02 × 10²³ particles','100 particles','1 gram','1 litre'],'6.02 × 10²³ particles'],
+['An exothermic reaction…',['Releases energy','Always absorbs energy','Stops particles','Cannot change temperature'],'Releases energy'],
+['Oxidation can be described as…',['Loss of electrons','Gain of electrons','Loss of neutrons','Gain of protons'],'Loss of electrons']
+],
+'Advanced Physics':[
+['What is momentum?',['Mass × velocity','Force ÷ time','Energy ÷ distance','Mass ÷ volume'],'Mass × velocity'],
+['What is the unit of energy?',['Joule','Newton','Ampere','Pascal'],'Joule'],
+['What does potential difference measure?',['Energy transferred per unit charge','Mass per volume','Force per area','Distance per second'],'Energy transferred per unit charge']
+],
+'Experimental Design':[
+['A hypothesis is…',['A testable prediction','A final result','A measuring instrument','A constant'],'A testable prediction'],
+['How can random error be reduced?',['Repeat measurements','Change every variable','Ignore data','Use fewer measurements'],'Repeat measurements'],
+['Why use a control?',['For comparison','To guarantee the hypothesis','To remove data','To change the dependent variable'],'For comparison']
+],
+'Biology Challenge':[
+['A heterozygous genotype contains…',['Two different alleles','Two identical alleles','No alleles','One chromosome'],'Two different alleles'],
+['Which process maintains chromosome number in body cells?',['Mitosis','Meiosis','Fertilisation','Mutation'],'Mitosis'],
+['Why can biodiversity improve ecosystem resilience?',['More species can provide alternative roles','It removes competition','It stops evolution','It prevents energy flow'],'More species can provide alternative roles']
+],
+'Chemistry Challenge':[
+['A limiting reactant is the one that…',['Is used up first','Has the largest mass','Is always a gas','Never reacts'],'Is used up first'],
+['At dynamic equilibrium…',['Forward and reverse rates are equal','The reaction stops','Only products remain','Temperature is zero'],'Forward and reverse rates are equal'],
+['Which can be calculated from moles and volume?',['Concentration','Density only','Temperature only','Wavelength'],'Concentration']
+],
+'Physics Challenge':[
+['If net force doubles and mass stays constant, acceleration…',['Doubles','Halves','Stays zero','Reverses'],'Doubles'],
+['Which quantity is a vector?',['Velocity','Speed','Mass','Temperature'],'Velocity'],
+['What does the area under a velocity-time graph represent?',['Displacement','Mass','Power','Temperature'],'Displacement']
+],
+'Science Investigation':[
+['Correlation means…',['Two variables are associated','One must cause the other','No data are needed','The experiment is perfect'],'Two variables are associated'],
+['Which graph suits continuous data?',['Scatter graph','Pie chart only','Pictogram only','Flowchart'],'Scatter graph'],
+['A valid conclusion should be based on…',['Evidence','A guess','The title','Someone else’s result'],'Evidence']
+]
+};
+
+let sciGrade,sciTopic,sciQs=[],sciI=0,sciScore=0;
+
+function openScience(){
+show('science');
+renderScienceGrades();
+}
+
+function renderScienceGrades(){
+$('scienceBox').innerHTML=`
+<div class="hero">
+<div style="font-size:65px">🧪</div>
+<h1 style="font-size:42px">Choose Your Science Grade</h1>
+<p>Grades 1–6 are fun and cartoony. Grades 7–12 become advanced Scientist Mode.</p>
+</div>
+<div class="grade-grid">
+${Object.keys(scienceTopics).map(g=>
+`<button class="choice" onclick="chooseScience(${g})">
+<strong>Grade ${g}</strong>
+<small>${scienceTopics[g].join(' • ')}</small>
+</button>`).join('')}
+</div>`;
+}
+
+function chooseScience(g){
+sciGrade=g;
+
+if(g<=6){
+$('scienceBox').innerHTML=`
+<div class="hero" style="background:#fff7c9;color:#17213b;border-radius:25px">
+<div class="dino idle">🦖</div>
+<h1 style="font-size:40px">Dino Science • Grade ${g}</h1>
+<div class="speech">RAWR! Pick a science mission! 🔬</div>
+</div>
+<div class="topic-grid">
+${scienceTopics[g].map(t=>
+`<button class="choice" onclick="startScience('${t}')">${t}<small>Fun science challenge</small></button>`).join('')}
+</div>
+<br>
+<button class="secondary" onclick="renderScienceGrades()">← Change Grade</button>`;
+}else{
+$('scienceBox').innerHTML=`
+<div class="lab">
+<div class="atom">⚛️</div>
+<h1>Scientist Mode • Grade ${g}</h1>
+<p>Welcome to the advanced laboratory. 🧪</p>
+</div>
+<div class="topic-grid">
+${scienceTopics[g].map(t=>
+`<button class="choice" onclick="startScience('${t}')">${t}<small>Advanced challenge</small></button>`).join('')}
+</div>
+<br>
+<button class="secondary" onclick="renderScienceGrades()">← Change Grade</button>`;
+}
+}
+
+function startScience(t){
+sciTopic=t;sciI=0;sciScore=0;sciQs=[];
+let pool=scienceBank[t]||scienceBank.Biology;
+
+for(let i=0;i<8;i++){
+let q=pool[rand(0,pool.length-1)];
+sciQs.push({
+q:q[0],
+options:[...q[1]].sort(()=>Math.random()-.5),
+correct:q[2]
+});
+}
+renderScienceQ();
+}
+
+function renderScienceQ(){
+let q=sciQs[sciI];
+let junior=sciGrade<=6;
+
+$('scienceBox').innerHTML=`
+${junior?`
+<div class="dino-box">
+<div id="dino" class="dino idle">🦖</div>
+<br>
+<div id="speech" class="speech">Ready? Let's solve it! 🧠</div>
+</div>
+`:
+`
+<div class="lab">
+<div class="atom">⚛️</div>
+<strong>LAB CHALLENGE • SCIENTIST MODE</strong>
+</div>
+`}
+<div class="quiz">
+<div class="toolbar">
+<span class="badge">Grade ${sciGrade} • ${sciTopic}</span>
+<button class="danger" onclick="home()">✕</button>
+</div>
+<div class="progress"><div style="width:${sciI/sciQs.length*100}%"></div></div>
+<div class="question-meta">
+<span>Question ${sciI+1} of ${sciQs.length}</span>
+<span>Score ${sciScore}</span>
+</div>
+<div class="question">${escapeHTML(q.q)}</div>
+<div class="answers">
+${q.options.map((a,i)=>
+`<button class="answer" onclick="answerScience(${i})">${escapeHTML(a)}</button>`).join('')}
+</div>
+</div>`;
+}
+
+function answerScience(i){
+let q=sciQs[sciI];
+let correct=q.options[i]===q.correct;
+let buttons=document.querySelectorAll('#scienceBox .answer');
+
+buttons.forEach((b,j)=>{
+b.disabled=true;
+if(q.options[j]===q.correct)b.classList.add('correct');
+if(j===i&&!correct)b.classList.add('wrong');
+});
+
+if(sciGrade<=6){
+let d=$('dino'),speech=$('speech');
+
+if(correct){
+sciScore++;
+d.className='dino happy';
+speech.textContent='RAWR! CORRECT! 🎉🦖';
+toast('Dino is happy! 🦖🎉');
+}else{
+d.className='dino angry';
+speech.textContent='GRRR! WRONG! Try the next one! 😤🦖';
+toast('Dino is angry! 😤');
+}
+}else{
+if(correct){
+sciScore++;
+toast('Correct, Scientist! ⚛️');
+}else{
+toast('Keep investigating! 🧪');
+}
+}
+
+setTimeout(()=>{
+sciI++;
+
+if(sciI>=sciQs.length){
+let p=Math.round(sciScore/sciQs.length*100);
+
+$('scienceBox').innerHTML=`
+<div class="result">
+<div class="trophy">${p==100?'🏆':sciGrade<=6?'🦖':'⚛️'}</div>
+<h2>${p==100?'Science Mastery!':'Science Complete!'}</h2>
+<div class="score">${p}%</div>
+<p>${sciScore}/${sciQs.length} correct</p>
+<button class="primary" onclick="startScience('${sciTopic}')">Play Again</button>
+<button class="secondary" onclick="chooseScience(${sciGrade})">Change Topic</button>
+</div>`;
+}else renderScienceQ();
+},700);
+}
+
+/* =========================
+   GEOGRAPHY
+========================= */
+
+let countries=[],selectedCountry=null;
+let geoQs=[],geoI=0,geoScore=0,geoDiff='Easy',geoStart=0;
+
+const API='https://restcountries.com/v3.1/all?fields=name,cca2,cca3,ccn3,flags,capital,currencies,languages,population,area,continents,region,subregion,timezones,borders,landlocked,latlng';
+
+async function loadCountries(){
+try{
+let r=await fetch(API);
+countries=await r.json();
+countries=countries
+.filter(x=>x.name&&x.name.common)
+.sort((a,b)=>a.name.common.localeCompare(b.name.common));
+renderCountries();
+buildGlobe();
+}catch(e){
+$('countries').innerHTML='<p>Could not load country data. Check your internet connection.</p>';
+}
+}
+
+function openGeo(){
+show('geo');
+}
+
+function openMap(){
+show('map');
+renderCountries();
+}
+
+function renderCountries(){
+$('countries').innerHTML=countries.map(c=>
+`<button class="country-btn" onclick="selectCountry('${String(c.name.common).replace(/'/g,"\\'")}')">
+${c.flags?.emoji||'🏳️'} ${escapeHTML(c.name.common)}
+</button>`).join('');
+}
+
+function filterCountries(){
+let q=$('search').value.toLowerCase();
+$('countries').innerHTML=countries
+.filter(c=>c.name.common.toLowerCase().includes(q))
+.map(c=>
+`<button class="country-btn" onclick="selectCountry('${String(c.name.common).replace(/'/g,"\\'")}')">
+${c.flags?.emoji||'🏳️'} ${escapeHTML(c.name.common)}
+</button>`).join('');
+}
+
+function selectCountry(name){
+let c=countries.find(x=>x.name.common===name);
+if(!c)return;
+selectedCountry=c;
+
+let currency=c.currencies?Object.values(c.currencies)[0]:null;
+let languages=c.languages?Object.values(c.languages).slice(0,3).join(', '):'—';
+
+$('countryDetail').innerHTML=`
+<h2>${c.flags?.emoji||'🌎'} ${escapeHTML(c.name.common)}</h2>
+<p>${c.region||''} ${c.subregion?'• '+c.subregion:''}</p>
+
+<div class="detail-grid">
+<div class="detail">🏛️ Capital<b>${escapeHTML(c.capital?.[0]||'—')}</b></div>
+<div class="detail">💰 Currency<b>${escapeHTML(currency?.name||'—')}</b></div>
+<div class="detail">🗣️ Language<b>${escapeHTML(languages)}</b></div>
+<div class="detail">👥 Population<b>${Number(c.population||0).toLocaleString()}</b></div>
+<div class="detail">📐 Area<b>${Number(c.area||0).toLocaleString()} km²</b></div>
+<div class="detail">🌐 Continent<b>${escapeHTML(c.continents?.[0]||'—')}</b></div>
+<div class="detail">🧭 Neighbours<b>${c.borders?.length||0}</b></div>
+<div class="detail">🌊 Landlocked<b>${c.landlocked?'Yes':'No'}</b></div>
+</div>`;
+}
+
+function randomCountry(){
+if(!countries.length)return;
+let c=countries[rand(0,countries.length-1)];
+selectCountry(c.name.common);
+}
+
+/* =========================
+   GLOBE
+========================= */
+
+let svg,projection,path,g,scale=250;
+
+function buildGlobe(){
+if(!window.d3)return;
+
+svg=d3.select('#globe');
+svg.selectAll('*').remove();
+
+projection=d3.geoOrthographic()
+.translate([350,275])
+.scale(scale)
+.clipAngle(90);
+
+path=d3.geoPath(projection);
+g=svg.append('g');
+
+g.append('circle')
+.attr('cx',350).attr('cy',275).attr('r',scale)
+.attr('fill','#bde9f5')
+.attr('stroke','#78aeca');
+
+fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+.then(r=>r.json())
+.then(world=>{
+let features=topojson.feature(world,world.objects.countries).features;
+
+g.selectAll('path')
+.data(features)
+.enter()
+.append('path')
+.attr('d',path)
+.attr('fill','#fff')
+.attr('stroke','#8aa1b5')
+.attr('stroke-width',.7)
+.on('click',(e,d)=>{
+let id=String(d.id).padStart(3,'0');
+let c=countries.find(x=>String(x.ccn3||'').padStart(3,'0')===id);
+if(c)selectCountry(c.name.common);
+});
+
+updateGlobe();
+});
+
+let start,last;
+
+svg.on('mousedown',e=>{
+start=e;last=e;
+});
+
+svg.on('mousemove',e=>{
+if(!start)return;
+let dx=e.clientX-last.clientX;
+let dy=e.clientY-last.clientY;
+let r=projection.rotate();
+projection.rotate([r[0]+dx*.5,r[1]-dy*.5]);
+last=e;
+updateGlobe();
+});
+
+svg.on('mouseup',()=>start=null);
+svg.on('mouseleave',()=>start=null);
+
+svg.on('wheel',e=>{
+e.preventDefault();
+scale=Math.max(170,Math.min(340,scale+(e.deltaY<0?12:-12)));
+updateGlobe();
+});
+}
+
+function updateGlobe(){
+if(!projection)return;
+projection.scale(scale);
+g.selectAll('path').attr('d',path);
+}
+
+/* =========================
+   GEOGRAPHY GAME
+========================= */
+
+function openGame(){
+show('game');
+$('difficulty').style.display='block';
+$('geoQuiz').innerHTML='';
+}
+
+function startGeoGame(diff){
+geoDiff=diff;
+geoI=0;
+geoScore=0;
+geoStart=Date.now();
+
+let count={Easy:5,Medium:10,Hard:15,Impossible:20}[diff];
+geoQs=[];
+
+for(let i=0;i<count;i++){
+let c=countries[rand(0,countries.length-1)];
+let type=diff==='Easy'
+?['capital','continent'][rand(0,1)]
+:diff==='Medium'
+?['capital','continent','currency','language'][rand(0,3)]
+:diff==='Hard'
+?['capital','continent','currency','language','population'][rand(0,4)]
+:['capital','continent','currency','language','population','area','neighbors'][rand(0,6)];
+
+let correct,question;
+
+if(type==='capital'){
+correct=c.capital?.[0]||'Unknown';
+question=`What is the capital of ${c.name.common}?`;
+}
+
+if(type==='continent'){
+correct=c.continents?.[0]||'Unknown';
+question=`Which continent is ${c.name.common} in?`;
+}
+
+if(type==='currency'){
+correct=c.currencies?Object.values(c.currencies)[0]?.name:'Unknown';
+question=`Which currency is used in ${c.name.common}?`;
+}
+
+if(type==='language'){
+correct=c.languages?Object.values(c.languages)[0]:'Unknown';
+question=`Which language is associated with ${c.name.common}?`;
+}
+
+if(type==='population'){
+correct=Math.round((c.population||0)/1000000)+'M';
+question=`About how many people live in ${c.name.common}?`;
+}
+
+if(type==='area'){
+correct=Math.round((c.area||0)/1000)+'K km²';
+question=`About how large is ${c.name.common}?`;
+}
+
+if(type==='neighbors'){
+correct=String(c.borders?.length||0);
+question=`How many land-border neighbours does ${c.name.common} have?`;
+}
+
+let values=countries.map(x=>{
+if(type==='capital')return x.capital?.[0];
+if(type==='continent')return x.continents?.[0];
+if(type==='currency')return x.currencies?Object.values(x.currencies)[0]?.name:null;
+if(type==='language')return x.languages?Object.values(x.languages)[0]:null;
+if(type==='population')return Math.round((x.population||0)/1000000)+'M';
+if(type==='area')return Math.round((x.area||0)/1000)+'K km²';
+if(type==='neighbors')return String(x.borders?.length||0);
+}).filter(Boolean);
+
+let options=[correct];
+
+while(options.length<4){
+let v=values[rand(0,values.length-1)];
+if(!options.includes(v))options.push(v);
+}
+
+geoQs.push({
+question,
+options:options.sort(()=>Math.random()-.5),
+correct
+});
+}
+
+$('difficulty').style.display='none';
+renderGeoQ();
+}
+
+function renderGeoQ(){
+let q=geoQs[geoI];
+
+$('geoQuiz').innerHTML=`
+<div class="quiz">
+<div class="progress"><div style="width:${geoI/geoQs.length*100}%"></div></div>
+<div class="question-meta">
+<span>Question ${geoI+1} of ${geoQs.length}</span>
+<span>Score ${geoScore}</span>
+</div>
+<div class="question">${escapeHTML(q.question)}</div>
+<div class="answers">
+${q.options.map((a,i)=>
+`<button class="answer" onclick="answerGeo(${i})">${escapeHTML(a)}</button>`).join('')}
+</div>
+</div>`;
+}
+
+function answerGeo(i){
+let q=geoQs[geoI];
+let buttons=document.querySelectorAll('#geoQuiz .answer');
+
+buttons.forEach((b,j)=>{
+b.disabled=true;
+if(q.options[j]===q.correct)b.classList.add('correct');
+if(j===i&&q.options[j]!==q.correct)b.classList.add('wrong');
+});
+
+if(q.options[i]===q.correct){
+geoScore++;
+toast('Correct! 🌍');
+}else toast('Not quite!');
+
+setTimeout(()=>{
+geoI++;
+
+if(geoI>=geoQs.length){
+finishGeo();
+}else renderGeoQ();
+},550);
+}
+
+function finishGeo(){
+let seconds=Math.round((Date.now()-geoStart)/1000);
+let percent=Math.round(geoScore/geoQs.length*100);
+
+stats.played++;
+stats.time+=seconds;
+
+if(percent>stats.best)stats.best=percent;
+
+if(percent===100){
+stats.wins++;
+if(!stats.fastest||seconds<stats.fastest)stats.fastest=seconds;
+stats.streak++;
+}else if(stats.streak<1){
+stats.streak=0;
+}
+
+saveStats();
+
+$('geoQuiz').innerHTML=`
+<div class="result">
+<div class="trophy">${percent===100?'🏆':'🎉'}</div>
+<h2>${percent===100?'PERFECT SCORE!':'Game Complete!'}</h2>
+<div class="score">${percent}%</div>
+<p>${geoScore}/${geoQs.length} correct</p>
+<p>${seconds} seconds • ${geoDiff}</p>
+<button class="primary" onclick="startGeoGame('${geoDiff}')">Play Again</button>
+<button class="secondary" onclick="openGeo()">Geography Home</button>
+</div>`;
+}
+
+/* =========================
+   LEAVE GAME
+========================= */
+
+function confirmLeave(){
+$('leaveModal').classList.add('show');
+}
+
+function closeLeave(){
+$('leaveModal').classList.remove('show');
+}
+
+function leaveGame(){
+closeLeave();
+$('geoQuiz').innerHTML='';
+openGeo();
+toast('Game session ended.');
+}
+
+function attemptLeave(){
+if(geoQs.length&&geoI<geoQs.length){
+confirmLeave();
+}else openGeo();
+}
+
+/* =========================
+   FUN FACT
+========================= */
 
 const facts=[
-["Japan","Japan has one of the world's longest life expectancies and is made up of thousands of islands."],
-["Luxembourg","Luxembourg is one of the world's smallest countries and is a founding member of several European institutions."],
-["Australia","Australia is both a country and a continent, and its interior includes the famous Outback."],
-["Brazil","Brazil is home to a large part of the Amazon rainforest."],
-["Canada","Canada has the world's longest coastline."],
-["Egypt","The ancient pyramids at Giza are among the world's most famous surviving monuments."],
-["Iceland","Iceland is known for volcanoes, glaciers, geothermal energy and the Northern Lights."],
-["Switzerland","Switzerland is famous for the Alps, watches, chocolate and a federal political system."],
-["India","India is home to one of the world's largest and most diverse populations."],
-["South Africa","South Africa has three capital cities with different governmental functions."]
+['🇨🇦 Canada','Canada has one of the longest coastlines in the world.'],
+['🇦🇺 Australia','Australia is both a country and a continent.'],
+['🇯🇵 Japan','Japan is made up of thousands of islands.'],
+['🇧🇷 Brazil','Brazil contains a huge part of the Amazon rainforest.'],
+['🇱🇺 Luxembourg','Luxembourg is one of Europe’s smallest countries.'],
+['🇪🇬 Egypt','The Great Pyramid of Giza is the only surviving ancient Wonder of the World.'],
+['🇿🇦 South Africa','South Africa has three capital cities.'],
+['🇳🇴 Norway','Norway is famous for its spectacular fjords.']
 ];
 
-let stats=JSON.parse(localStorage.getItem("ceStats")||'{"wins":0,"fastest":0,"xp":0,"played":0,"correct":0,"total":0,"streak":1}');
-let game={};let factIndex=new Date().getDate()%facts.length;
+function fact(){
+show('factScreen');
+showFact();
+}
 
-function save(){localStorage.setItem("ceStats",JSON.stringify(stats));updateStats()}
-function updateStats(){
-["wins","xp","played","correct","total"].forEach(k=>{let e=document.getElementById(k);if(e)e.textContent=stats[k]});
-document.getElementById("homeWins").textContent=stats.wins;document.getElementById("homeXP").textContent=stats.xp;document.getElementById("homeStreak").textContent=stats.streak;document.getElementById("streak").textContent="🔥 Streak: "+stats.streak;document.getElementById("statsStreak").textContent=stats.streak;
-document.getElementById("accuracy").textContent=stats.total?Math.round(stats.correct/stats.total*100)+"%":"0%";document.getElementById("fastest").textContent=stats.fastest?stats.fastest+"s":"—";
-let badges=[];if(stats.wins>=1)badges.push("🥉 First Win");if(stats.wins>=5)badges.push("🏆 Explorer");if(stats.xp>=100)badges.push("⭐ 100 XP");if(stats.streak>=7)badges.push("🔥 7-Day Streak");if(stats.total>=50)badges.push("🧠 Geography Brain");document.getElementById("badges").innerHTML=badges.length?badges.map(x=>`<span class="badge">${x}</span>`).join(""):"<span class='muted'>Play games to unlock achievements.</span>";
+function showFact(){
+let f=facts[rand(0,facts.length-1)];
+$('factTitle').textContent=f[0];
+$('factText').textContent=f[1];
 }
-function showPage(id){document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));let n=document.getElementById("n-"+id);if(n)n.classList.add("active");if(id==="stats")updateStats();if(id==="fact")renderFact();if(id==="map"&&!document.getElementById("countryInfo").innerHTML)showCountry(countries[0])}
-function showCountry(c){let pop=c[5],share=(pop/8200*100).toFixed(2);document.getElementById("countryInfo").innerHTML=`<div class="country"><div class="flag">${c[1]}</div><div><h2>${c[0]}</h2><div class="muted">${c[4]}</div></div></div><div class="facts"><div class="factbox"><b>CAPITAL</b>${c[2]}</div><div class="factbox"><b>CURRENCY</b>${c[3]}</div><div class="factbox"><b>POPULATION</b>${pop}M</div><div class="factbox"><b>WORLD POP. SHARE</b>${share}%</div><div class="factbox"><b>LAND AREA</b>${c[6].toLocaleString()} km²</div><div class="factbox"><b>COORDINATES</b>${c[7].toFixed(2)}, ${c[8].toFixed(2)}</div></div>`}
-function renderMarkers(){let g=document.getElementById("globe");g.innerHTML="";countries.forEach(c=>{let x=50+c[8]/180*45,y=50-c[7]/90*45;let m=document.createElement("button");m.className="marker";m.style.left=x+"%";m.style.top=y+"%";m.title=c[0];m.onclick=()=>showCountry(c);g.appendChild(m)})}
-function searchCountry(){let q=document.getElementById("search").value.toLowerCase();let c=countries.find(x=>x[0].toLowerCase().includes(q));if(c)showCountry(c)}
-function randomCountry(){showCountry(countries[Math.floor(Math.random()*countries.length)])}
-renderMarkers();showCountry(countries[0]);renderFact();updateStats();
 
-function renderFact(){let f=facts[factIndex];document.getElementById("dailyFact").textContent="🌎 "+f[1];document.getElementById("factCountry").textContent="Country: "+f[0]}
-function newFact(){factIndex=(factIndex+1)%facts.length;renderFact()}
+/* =========================
+   START
+========================= */
 
-const configs={Easy:{n:5,types:["capital","flag"]},Medium:{n:7,types:["capital","flag","currency"]},Hard:{n:10,types:["capital","flag","currency","population","continent"]},Impossible:{n:12,types:["capital","flag","currency","population","continent","area","coordinates"]}};
-function shuffle(a){return a.sort(()=>Math.random()-.5)}
-function makeQuestion(type,c){
-let key="",correct="";
-if(type==="capital"){key=`What is the capital of ${c[0]}?`;correct=c[2]}
-if(type==="flag"){key=`Which flag represents ${c[0]}?`;correct=c[1]}
-if(type==="currency"){key=`What currency is used in ${c[0]}?`;correct=c[3]}
-if(type==="population"){key=`Which population is closest to ${c[0]}?`;correct=c[5]+" million"}
-if(type==="continent"){key=`Which continent is ${c[0]} in?`;correct=c[4]}
-if(type==="area"){key=`Which land area is closest to ${c[0]}?`;correct=c[6].toLocaleString()+" km²"}
-if(type==="coordinates"){key=`Which coordinates are closest to ${c[0]}?`;correct=c[7].toFixed(1)+"°, "+c[8].toFixed(1)+"°"}
-let opts=shuffle([correct,...shuffle(countries.filter(x=>x!==c).map(x=>{
-if(type==="capital")return x[2];if(type==="flag")return x[1];if(type==="currency")return x[3];if(type==="population")return x[5]+" million";if(type==="continent")return x[4];if(type==="area")return x[6].toLocaleString()+" km²";return x[7].toFixed(1)+"°, "+x[8].toFixed(1)+"°"
-})).slice(0,3)]);
-return {key,correct,opts}
-}
-function startGame(level){
-let cfg=configs[level];game={level,questions:[],i:0,score:0,start:Date.now(),locked:false};
-for(let i=0;i<cfg.n;i++){let c=countries[Math.floor(Math.random()*countries.length)],type=cfg.types[Math.floor(Math.random()*cfg.types.length)];game.questions.push(makeQuestion(type,c))}
-document.getElementById("gameMenu").style.display="none";document.getElementById("results").style.display="none";document.getElementById("gamePlay").style.display="block";document.getElementById("difficulty").textContent="🎮 "+level;showQuestion()
-}
-function showQuestion(){
-let q=game.questions[game.i];game.locked=false;document.getElementById("qnum").textContent=`Question ${game.i+1} of ${game.questions.length}`;document.getElementById("bar").style.width=(game.i/game.questions.length*100)+"%";document.getElementById("question").textContent=q.key;document.getElementById("feedback").textContent="";
-document.getElementById("answers").innerHTML=q.opts.map((x,i)=>`<button class="answer" onclick="answer(this,${JSON.stringify(x).replace(/</g,"\\u003c")})"><b>${i+1}.</b> ${x}</button>`).join("")
-}
-function answer(btn,val){
-if(game.locked)return;game.locked=true;let q=game.questions[game.i],buttons=[...document.querySelectorAll(".answer")];buttons.forEach(b=>{if(b.textContent.includes(q.correct))b.classList.add("correct")});if(val===q.correct){game.score++;btn.classList.add("correct");document.getElementById("feedback").innerHTML="<span class='success'>✓ Correct!</span>"}else{btn.classList.add("wrong");document.getElementById("feedback").textContent="✗ Not quite — correct answer: "+q.correct}
-stats.total++;if(val===q.correct)stats.correct++;save();setTimeout(()=>{game.i++;if(game.i<game.questions.length)showQuestion();else finishGame()},850)
-}
-function finishGame(){
-let seconds=Math.round((Date.now()-game.start)/1000),perfect=game.score===game.questions.length;stats.played++;stats.xp+=game.score*10+(perfect?25:0);if(perfect){stats.wins++;if(!stats.fastest||seconds<stats.fastest)stats.fastest=seconds}save();
-document.getElementById("gamePlay").style.display="none";let r=document.getElementById("results");r.style.display="block";r.innerHTML=`<h2>${perfect?"🎉 PERFECT SCORE!":"🏁 Game Complete"}</h2><div class="stat">${game.score}/${game.questions.length}</div><p>${Math.round(game.score/game.questions.length*100)}% correct · ${seconds}s</p><p class="muted">${perfect?"Amazing! You mastered this challenge.":"Keep practicing and try the next difficulty."}</p><button class="bigbtn" onclick="startGame('${game.level}')">🔄 Play Again</button><button class="bigbtn secondary" onclick="leaveGame()">🏠 Back to Game Menu</button>`
-}
-function confirmLeave(){document.getElementById("leaveModal").classList.add("show")}
-function closeModal(){document.getElementById("leaveModal").classList.remove("show")}
-function leaveGame(){closeModal();document.getElementById("gamePlay").style.display="none";document.getElementById("results").style.display="none";document.getElementById("gameMenu").style.display="block";showPage("game")}
+updateStats();
+loadCountries();
+
 </script>
 </body>
 </html>
